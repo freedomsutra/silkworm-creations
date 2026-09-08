@@ -84,34 +84,36 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
               />
               <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/95 via-emerald-950/25 to-transparent" />
               
-              {/* Official Silk Mark Certification Seal */}
-              <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/85 backdrop-blur-md border border-gold-400/50 text-[10px] font-bold text-gold-300 shadow-lg tracking-wider uppercase">
-                <ShieldCheck className="w-3.5 h-3.5 text-gold-400" />
-                <span>Govt. Recognized Silk Mark</span>
+              {/* Official Badges Header (Responsive Safe) */}
+              <div className="absolute top-3 inset-x-3 sm:top-4 sm:inset-x-4 flex items-center justify-between gap-2 z-10">
+                <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-emerald-950/90 backdrop-blur-md border border-gold-400/50 text-[9px] sm:text-[10px] font-bold text-gold-300 shadow-md tracking-wider uppercase truncate">
+                  <ShieldCheck className="w-3 h-3 text-gold-400 flex-shrink-0" />
+                  <span className="truncate">Silk Mark Certified</span>
+                </div>
+
+                <div className="bg-emerald-950/90 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-gold-400/40 text-[9px] sm:text-[10px] font-bold text-cream-100 tracking-wider uppercase flex-shrink-0">
+                  Tricity Flagship
+                </div>
               </div>
 
-              <div className="absolute top-4 right-4 bg-emerald-950/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold-400/40 text-[10px] font-bold text-cream-100 tracking-wider uppercase">
-                Tricity Flagship
-              </div>
-
-              {/* Floating Editorial Card */}
-              <div className="absolute bottom-5 inset-x-5 p-4 sm:p-5 rounded-2xl bg-emerald-950/95 backdrop-blur-md border border-gold-400/30 text-cream-100 shadow-xl">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Autumn / Winter Edit</span>
-                      <span className="w-1 h-1 rounded-full bg-gold-400" />
-                      <span className="text-[10px] text-green-400 font-semibold">Ready to Drape</span>
+              {/* Floating Editorial Card (Mobile Overflow Safe) */}
+              <div className="absolute bottom-3 inset-x-3 sm:bottom-5 sm:inset-x-5 p-3 sm:p-4 rounded-2xl bg-emerald-950/95 backdrop-blur-md border border-gold-400/30 text-cream-100 shadow-xl overflow-hidden z-10">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 truncate">
+                      <span className="text-[9px] sm:text-[10px] font-bold text-gold-400 uppercase tracking-wider truncate">Autumn Edit</span>
+                      <span className="w-1 h-1 rounded-full bg-gold-400 flex-shrink-0" />
+                      <span className="text-[9px] sm:text-[10px] text-green-400 font-semibold truncate">Ready to Drape</span>
                     </div>
-                    <p className="font-serif text-base font-bold text-cream-50 mt-0.5">Pure Linen Zari Woven Saree</p>
-                    <p className="text-xs text-cream-300 font-medium mt-0.5">₹8,699 &bull; Complimentary Fall &amp; Pico Pre-Attached</p>
+                    <p className="font-serif text-sm sm:text-base font-bold text-cream-50 mt-0.5 truncate">Pure Linen Zari Saree</p>
+                    <p className="text-[11px] sm:text-xs text-cream-300 font-medium mt-0.5 truncate">₹8,699 &bull; Free Fall &amp; Pico Done</p>
                   </div>
                   <button
                     onClick={onExploreClick}
-                    className="p-3 bg-gold-500 text-emerald-950 rounded-full font-bold hover:bg-gold-400 transition-transform active:scale-95 shadow-md flex-shrink-0 ml-3"
+                    className="p-2.5 sm:p-3 bg-gold-500 text-emerald-950 rounded-full font-bold hover:bg-gold-400 transition-transform active:scale-95 shadow-md flex-shrink-0"
                     aria-label="View Handcrafted Saree"
                   >
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
               </div>

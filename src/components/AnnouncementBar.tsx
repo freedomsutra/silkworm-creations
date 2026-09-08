@@ -1,37 +1,43 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, MapPin, Video, PhoneCall } from 'lucide-react';
+import { Sparkles, MapPin, Video } from 'lucide-react';
 
 export default function AnnouncementBar() {
   return (
-    <div className="bg-emerald-900 text-cream-100 text-xs py-2 px-4 font-medium border-b border-gold-500/20">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
-        <div className="flex items-center gap-2 justify-center">
-          <Sparkles className="w-3.5 h-3.5 text-gold-400 animate-pulse" />
-          <span>Complimentary <strong>Fall &amp; Pico</strong> with all sarees</span>
-          <span className="hidden md:inline text-gold-400/60">•</span>
-          <span className="hidden md:inline text-gold-300">Free Express Shipping Across India</span>
+    <div className="bg-[#0A2318] text-cream-100 text-xs py-2 px-3 sm:px-4 font-medium border-b border-gold-500/20">
+      <div className="max-w-7xl mx-auto flex items-center justify-between text-[11px] sm:text-xs">
+        {/* Left / Center Guarantee */}
+        <div className="flex items-center gap-2 mx-auto sm:mx-0 text-center sm:text-left">
+          <Sparkles className="w-3.5 h-3.5 text-gold-400 flex-shrink-0 animate-pulse" />
+          <span className="truncate">
+            <strong className="text-gold-300 font-semibold">Complimentary Fall &amp; Pico</strong> on All Sarees
+          </span>
+          <span className="hidden md:inline text-gold-400/40">&bull;</span>
+          <span className="hidden md:inline text-cream-200">Free Insured Express Delivery Across India</span>
         </div>
-        <div className="flex items-center gap-4 justify-center text-[11px] text-cream-200">
-          <a 
-            href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur" 
-            target="_blank" 
+
+        {/* Right Luxury Quick Links (Desktop & Tablet) */}
+        <div className="hidden sm:flex items-center gap-4 text-[11px] text-cream-200 flex-shrink-0">
+          <a
+            href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
+            target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 hover:text-gold-300 transition-colors"
           >
             <MapPin className="w-3 h-3 text-gold-400" />
-            <span>Showroom: SCO 2, Reliance Sq, Zirakpur</span>
+            <span className="truncate">Reliance Sq, Zirakpur</span>
           </a>
-          <span className="text-gold-400/40">|</span>
-          <a 
-            href="https://wa.me/917876719360?text=Hi%20SilkWorm%20Creation,%20I%20would%20like%20to%20book%20a%201-on-1%20video%20call%20to%20see%20your%20sarees" 
-            target="_blank" 
+          <span className="text-gold-400/30">|</span>
+          <a
+            href="https://wa.me/917876719360?text=Hi%20SilkWorm%20Creation,%20I%20would%20like%20to%20book%20a%201-on-1%20video%20call%20to%20see%20your%20sarees"
+            target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 hover:text-gold-300 transition-colors text-gold-400 font-semibold"
+            className="flex items-center gap-1.5 text-gold-400 hover:text-gold-300 transition-colors font-medium"
           >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping" />
             <Video className="w-3 h-3 text-green-400" />
-            <span>Book Video Consultation</span>
+            <span>Book Video Drape</span>
           </a>
         </div>
       </div>

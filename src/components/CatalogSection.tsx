@@ -172,7 +172,7 @@ export default function CatalogSection({
         </div>
 
         {/* Color Chips Horizontal Scroll */}
-        <div className="pt-3 border-t border-stone-100 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <div className="pt-3 border-t border-stone-100 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0">
           <span className="text-xs text-stone-500 font-semibold flex-shrink-0 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5 text-gold-600" />
             <span>Palette:</span>

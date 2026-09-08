@@ -98,13 +98,13 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           </button>
         </div>
 
-        {/* Complimentary Fall & Pico Ribbon */}
-        <div className="absolute bottom-3 left-3 right-3 py-1.5 px-3 rounded-xl bg-cream-50/95 backdrop-blur-md border border-gold-500/30 text-[10px] font-semibold text-emerald-950 flex items-center justify-between z-10 shadow-xs">
-          <span className="flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3 text-gold-600" />
-            <span>Free Fall &amp; Pico Pre-Finished</span>
+        {/* Complimentary Fall & Pico Ribbon (Mobile Safe) */}
+        <div className="absolute bottom-2.5 left-2.5 right-2.5 py-1 px-2.5 rounded-xl bg-cream-50/95 backdrop-blur-md border border-gold-500/30 text-[9px] sm:text-[10px] font-semibold text-emerald-950 flex items-center justify-between z-10 shadow-2xs overflow-hidden">
+          <span className="flex items-center gap-1.5 truncate">
+            <Sparkles className="w-3 h-3 text-gold-600 flex-shrink-0" />
+            <span className="truncate">Free Fall &amp; Pico Pre-Finished</span>
           </span>
-          <span className="text-[9px] text-stone-500 font-medium">Ready to Wear</span>
+          <span className="text-[9px] text-stone-500 font-medium flex-shrink-0 ml-1 hidden xs:inline">Ready to Wear</span>
         </div>
 
         {/* Hover Action Overlay on Desktop */}

@@ -15,7 +15,8 @@ export default function CartDrawer() {
     updateQuantity, 
     removeItem, 
     subtotal, 
-    openCheckout 
+    openCheckout, 
+    formatPrice 
   } = useCart();
 
   const [promoCode, setPromoCode] = useState('');
@@ -138,7 +139,7 @@ export default function CartDrawer() {
                     </div>
 
                     <span className="font-bold text-xs text-emerald-950 font-serif">
-                      ₹{(item.product.price * item.quantity).toLocaleString('en-IN')}
+                      {formatPrice(item.product.price * item.quantity)}
                     </span>
                   </div>
                 </div>
@@ -171,11 +172,11 @@ export default function CartDrawer() {
             <div className="space-y-1.5 text-xs text-stone-600">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
-                <span>₹{subtotal.toLocaleString('en-IN')}</span>
+                <span>{formatPrice(subtotal)}</span>
               </div>
               <div className="flex justify-between text-emerald-800 font-medium">
                 <span>Promotional Discount:</span>
-                <span>- ₹{discount.toLocaleString('en-IN')}</span>
+                <span>- {formatPrice(discount)}</span>
               </div>
               <div className="flex justify-between text-emerald-800 font-medium">
                 <span>Fall &amp; Pico Tailoring:</span>
@@ -184,7 +185,7 @@ export default function CartDrawer() {
               <div className="pt-2 border-t border-stone-200 flex justify-between font-bold text-stone-900 text-sm">
                 <span>Total:</span>
                 <span className="text-emerald-950 font-serif text-base">
-                  ₹{finalTotal.toLocaleString('en-IN')}
+                  {formatPrice(finalTotal)}
                 </span>
               </div>
             </div>
@@ -194,7 +195,7 @@ export default function CartDrawer() {
               className="w-full py-4 bg-emerald-900 hover:bg-emerald-950 text-gold-300 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/20 transition-all"
             >
               <Zap className="w-4 h-4 text-gold-400 fill-current" />
-              <span>Proceed to 1-Click Checkout &bull; ₹{finalTotal.toLocaleString('en-IN')}</span>
+              <span>Proceed to 1-Click Checkout &bull; {formatPrice(finalTotal)}</span>
             </button>
           </div>
         )}

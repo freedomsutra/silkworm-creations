@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { SareeProduct } from '@/types';
 import { 
@@ -15,7 +15,8 @@ export default function FastCheckoutModal() {
     closeCheckout, 
     selectedProductForCheckout, 
     items, 
-    subtotal 
+    subtotal, 
+    formatPrice 
   } = useCart();
 
   const [step, setStep] = useState<'phone' | 'address' | 'payment' | 'success'>('phone');
@@ -27,6 +28,17 @@ export default function FastCheckoutModal() {
   const [pincode, setPincode] = useState('160018');
   const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'cod'>('upi');
   const [orderId, setOrderId] = useState('');
+
+  useEffect(() => {
+    if (checkoutModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [checkoutModalOpen]);
 
   if (!checkoutModalOpen) return null;
 
@@ -65,10 +77,10 @@ export default function FastCheckoutModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-hidden">
       <div className="fixed inset-0 bg-black/75 backdrop-blur-sm" onClick={closeCheckout} />
 
-      <div className="relative bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl z-10 border border-stone-200 my-auto flex flex-col">
+      <div className="relative bg-white w-full max-w-lg h-[90vh] sm:h-auto sm:max-h-[90vh] rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl z-10 border border-stone-200 flex flex-col overscroll-contain">
         
         {/* Top Header */}
         <div className="bg-emerald-950 text-cream-100 p-4 sm:p-5 flex items-center justify-between border-b border-gold-500/30">
@@ -290,11 +302,11 @@ export default function FastCheckoutModal() {
               <div className="p-3.5 rounded-2xl bg-cream-50 border border-stone-200 text-xs space-y-1.5">
                 <div className="flex justify-between text-stone-600">
                   <span>Items Subtotal ({checkoutItems.length} Saree):</span>
-                  <span>₹{totalAmount.toLocaleString('en-IN')}</span>
+                  <span>{formatPrice(totalAmount)}</span>
                 </div>
                 <div className="flex justify-between text-emerald-800 font-medium">
                   <span>Welcome Saree Voucher (SILK500):</span>
-                  <span>- ₹{discountAmount.toLocaleString('en-IN')}</span>
+                  <span>- {formatPrice(discountAmount)}</span>
                 </div>
                 <div className="flex justify-between text-emerald-800 font-medium">
                   <span>Fall &amp; Pico Detailing:</span>
@@ -306,7 +318,7 @@ export default function FastCheckoutModal() {
                 </div>
                 <div className="pt-2 border-t border-stone-200 flex justify-between font-bold text-stone-900 text-sm">
                   <span>Total Payable:</span>
-                  <span className="text-emerald-950 font-serif text-base">₹{finalPayable.toLocaleString('en-IN')}</span>
+                  <span className="text-emerald-950 font-serif text-base">{formatPrice(finalPayable)}</span>
                 </div>
               </div>
 
@@ -316,7 +328,7 @@ export default function FastCheckoutModal() {
                 className="w-full py-4 bg-emerald-900 hover:bg-emerald-950 text-gold-300 rounded-2xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/20 transition-all"
               >
                 <Zap className="w-4 h-4 text-gold-400 fill-current" />
-                <span>Place Order &bull; Pay ₹{finalPayable.toLocaleString('en-IN')}</span>
+                <span>Place Order &bull; Pay {formatPrice(finalPayable)}</span>
               </button>
             </div>
           )}

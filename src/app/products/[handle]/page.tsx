@@ -52,7 +52,7 @@ export default function ProductPage({ params }: Props) {
   ).slice(0, 4);
 
   return (
-    <main className="min-h-screen flex flex-col bg-cream-50">
+    <main className="min-h-screen flex flex-col bg-cream-50 pb-16 md:pb-0">
       <AnnouncementBar />
       <NavbarWrapper />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
