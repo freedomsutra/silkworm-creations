@@ -48,16 +48,16 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
   return (
     <div 
       onClick={() => onQuickView(product)}
-      className="group relative bg-white rounded-3xl overflow-hidden border border-stone-200/90 hover:border-gold-500/60 transition-all duration-300 hover:shadow-xl flex flex-col cursor-pointer"
+      className="group relative bg-white rounded-3xl overflow-hidden border border-stone-200/90 hover:border-gold-500/60 transition-all duration-300 hover:shadow-xl flex flex-col cursor-pointer w-full min-w-0"
     >
       {/* Product Image Container with Dual-Image Hover Transition */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
         
-        {/* Primary Image: Model Drape Shot */}
+        {/* Primary Image: Model Drape Shot with tailored vertical framing */}
         <img
           src={product.images[0] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80'}
           alt={product.title}
-          className="w-full h-full object-cover object-center transition-opacity duration-500 group-hover:opacity-0 absolute inset-0"
+          className="w-full h-full object-cover object-[center_15%] transition-opacity duration-500 group-hover:opacity-0 absolute inset-0"
           loading="lazy"
         />
 
@@ -65,9 +65,10 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
         <img
           src={product.images[1] || product.images[0]}
           alt={`${product.title} fabric texture zoom`}
-          className="w-full h-full object-cover object-center transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
+          className="w-full h-full object-cover object-[center_15%] transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
           loading="lazy"
         />
+
 
         {/* Top-Left Badges Overlay (Luxury Editorial Style) */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 items-start z-10 max-w-[70%]">
@@ -179,28 +180,29 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           </div>
 
           {/* Streamlined Primary CTA */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full min-w-0">
             <button
               onClick={handleInstantBuy}
-              className="flex-1 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-gold-300 border border-gold-500/40 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-all hover:border-gold-400 active:scale-98"
+              className="flex-1 min-w-0 py-2.5 px-3 bg-gradient-to-r from-emerald-950 via-[#103322] to-emerald-950 hover:from-emerald-900 hover:to-emerald-900 text-gold-300 border border-gold-400/50 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-all hover:border-gold-300 active:scale-98"
             >
-              <Zap className="w-3.5 h-3.5 text-gold-400 fill-current" />
-              <span>1-Click Buy (UPI)</span>
+              <Zap className="w-3.5 h-3.5 text-gold-400 fill-gold-400 flex-shrink-0" />
+              <span className="truncate text-gold-200 font-semibold tracking-wide">1-Click Buy (UPI)</span>
             </button>
 
             <button
               onClick={handleAddToCart}
-              className={`p-2.5 rounded-xl border transition-all ${
+              className={`p-2.5 rounded-xl border transition-all flex-shrink-0 flex items-center justify-center ${
                 added 
-                  ? 'bg-emerald-800 text-white border-emerald-800' 
-                  : 'bg-stone-100 hover:bg-stone-200 text-stone-800 border-stone-200'
+                  ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs' 
+                  : 'bg-stone-100 hover:bg-stone-200 text-stone-800 border-stone-200 hover:border-stone-300'
               }`}
               title="Add to Bag"
               aria-label="Add to Bag"
             >
-              {added ? <Check className="w-4 h-4 text-white" /> : <ShoppingBag className="w-4 h-4" />}
+              {added ? <Check className="w-4 h-4 text-white" /> : <ShoppingBag className="w-4 h-4 text-stone-800" />}
             </button>
           </div>
+
 
           {/* Compact Trust Note */}
           <p className="text-[10px] text-stone-400 text-center mt-2 flex items-center justify-center gap-1">

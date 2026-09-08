@@ -87,9 +87,9 @@ export default function CatalogSection({
   }, [products, selectedCategory, selectedColor, priceBand, searchQuery, sortBy]);
 
   return (
-    <section id="catalog-section" className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="catalog-section" className="py-14 sm:py-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
       {/* Section Header */}
-      <div className="text-center max-w-2xl mx-auto mb-10">
+      <div className="text-center max-w-2xl mx-auto mb-10 w-full px-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900/10 text-emerald-900 text-xs font-bold uppercase tracking-wider mb-2">
           <Sparkles className="w-3.5 h-3.5 text-gold-600" />
           <span>Handpicked Artisan Collection</span>
@@ -103,11 +103,11 @@ export default function CatalogSection({
       </div>
 
       {/* Filter and Search Controls */}
-      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-sm mb-8 space-y-4">
-        <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
+      <div className="bg-white rounded-3xl p-4 sm:p-6 border border-stone-200/90 shadow-sm mb-8 space-y-4 w-full max-w-full min-w-0 overflow-hidden">
+        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between w-full min-w-0">
           
           {/* Search Input */}
-          <div className="relative w-full md:w-80">
+          <div className="relative w-full md:w-80 min-w-0">
             <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
@@ -127,22 +127,23 @@ export default function CatalogSection({
           </div>
 
           {/* Budget Filter Buttons */}
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1">
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 min-w-0 scrollbar-none">
             <span className="text-xs text-stone-500 font-semibold flex items-center gap-1 flex-shrink-0">
               <Tag className="w-3.5 h-3.5 text-gold-600" />
               <span>Budget:</span>
             </span>
             <button
               onClick={() => setPriceBand('all')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
                 priceBand === 'all' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
               All Prices
             </button>
+
             <button
               onClick={() => setPriceBand('under-8500')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
                 priceBand === 'under-8500' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
@@ -150,7 +151,7 @@ export default function CatalogSection({
             </button>
             <button
               onClick={() => setPriceBand('8500-10000')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
                 priceBand === '8500-10000' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
@@ -158,7 +159,7 @@ export default function CatalogSection({
             </button>
             <button
               onClick={() => setPriceBand('above-10000')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
                 priceBand === 'above-10000' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
@@ -167,7 +168,7 @@ export default function CatalogSection({
           </div>
 
           {/* Sort Selector */}
-          <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end min-w-0 flex-shrink-0">
             <span className="text-xs text-stone-500 font-medium">Sort by:</span>
             <select
               value={sortBy}
@@ -183,7 +184,7 @@ export default function CatalogSection({
         </div>
 
         {/* Color Chips Horizontal Scroll */}
-        <div className="pt-3 border-t border-stone-100 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0">
+        <div className="pt-3 border-t border-stone-100 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none w-full min-w-0">
           <span className="text-xs text-stone-500 font-semibold flex-shrink-0 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5 text-gold-600" />
             <span>Palette:</span>
@@ -194,7 +195,7 @@ export default function CatalogSection({
               <button
                 key={c}
                 onClick={() => setSelectedColor(c)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 flex-shrink-0 ${
                   selectedColor === c
                     ? 'bg-emerald-950 text-white border border-gold-400/60 shadow-sm ring-1 ring-gold-400/20'
                     : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
@@ -236,7 +237,8 @@ export default function CatalogSection({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full min-w-0">
+
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}

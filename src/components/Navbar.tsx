@@ -76,35 +76,36 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
           <Link
             href="/"
             onClick={() => onCategorySelect('All')}
-            className="flex flex-col items-center justify-center text-center group cursor-pointer"
+            className="flex flex-col items-center justify-center text-center group cursor-pointer min-w-0 max-w-[190px] xs:max-w-[220px] sm:max-w-none"
           >
-            <span className="font-serif text-xl sm:text-2xl lg:text-3xl font-normal tracking-[0.24em] text-emerald-950 group-hover:text-gold-700 transition-colors">
+            <span className="font-serif text-lg xs:text-xl sm:text-2xl lg:text-3xl font-normal tracking-[0.16em] xs:tracking-[0.20em] sm:tracking-[0.24em] text-emerald-950 group-hover:text-gold-700 transition-colors truncate">
               SILKWORM
             </span>
-            <span className="text-[7.5px] sm:text-[8.5px] font-sans uppercase tracking-[0.38em] text-gold-700 font-semibold -mt-0.5">
+            <span className="text-[6.5px] xs:text-[7.5px] sm:text-[8.5px] font-sans uppercase tracking-[0.22em] xs:tracking-[0.28em] sm:tracking-[0.38em] text-gold-700 font-semibold -mt-0.5 truncate">
               CREATION &bull; ATELIER CHANDIGARH
             </span>
           </Link>
 
           {/* Right: Utility Actions (Currency, Wishlist, Cart) */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
             {/* Currency Selector Pill */}
-            <div className="relative flex items-center gap-1.5 border border-stone-300/70 rounded-full px-2.5 sm:px-3 py-1 bg-white/80 backdrop-blur-sm text-xs shadow-2xs hover:border-gold-500/60 transition-colors">
+            <div className="relative flex items-center gap-1 border border-stone-300/70 rounded-full px-2 sm:px-3 py-1 bg-white/80 backdrop-blur-sm text-[11px] sm:text-xs shadow-2xs hover:border-gold-500/60 transition-colors">
               <Globe className="w-3 h-3 text-gold-600 flex-shrink-0" />
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value as Currency)}
-                className="bg-transparent text-stone-800 font-bold focus:outline-none cursor-pointer text-xs pr-1 appearance-none"
+                className="bg-transparent text-stone-800 font-bold focus:outline-none cursor-pointer text-[11px] sm:text-xs pr-1 appearance-none"
                 aria-label="Select currency"
               >
-                <option value="INR">INR (₹)</option>
-                <option value="USD">USD ($)</option>
-                <option value="CAD">CAD (CA$)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="AED">AED (د.إ)</option>
+                <option value="INR">₹ INR</option>
+                <option value="USD">$ USD</option>
+                <option value="CAD">CA$ CAD</option>
+                <option value="GBP">£ GBP</option>
+                <option value="AED">AED</option>
               </select>
-              <ChevronDown className="w-2.5 h-2.5 text-stone-400 pointer-events-none -ml-1" />
+              <ChevronDown className="w-2.5 h-2.5 text-stone-400 pointer-events-none -ml-0.5" />
             </div>
+
 
             {/* Wishlist Button (Desktop) */}
             <button
