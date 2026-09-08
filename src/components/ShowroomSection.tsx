@@ -1,9 +1,12 @@
 'use client';
 
-import React from 'react';
-import { MapPin, Clock, Phone, Navigation, Sparkles, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Clock, Phone, Navigation, Sparkles, Calendar } from 'lucide-react';
+import ShowroomAppointmentModal from '@/components/ShowroomAppointmentModal';
 
 export default function ShowroomSection() {
+  const [appointmentModalOpen, setAppointmentModalOpen] = useState(false);
+
   return (
     <section id="showroom" className="py-16 bg-emerald-950 text-cream-100 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -68,14 +71,13 @@ export default function ShowroomSection() {
                 <span>Get Google Maps Directions</span>
               </a>
 
-              <a
-                href="https://wa.me/917876719360?text=Hi%20SilkWorm%20Creation,%20I%20would%20like%20to%20plan%20a%20visit%20to%20your%20Zirakpur%20showroom."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3.5 bg-emerald-900 hover:bg-emerald-800 text-cream-100 font-semibold rounded-2xl text-xs border border-gold-400/30 flex items-center justify-center gap-2 transition-colors"
+              <button
+                onClick={() => setAppointmentModalOpen(true)}
+                className="px-6 py-3.5 bg-emerald-900 hover:bg-emerald-800 text-cream-100 font-semibold rounded-2xl text-xs border border-gold-400/40 flex items-center justify-center gap-2 transition-all hover:border-gold-400 shadow-md"
               >
-                <span>Inform Boutique Before Visiting</span>
-              </a>
+                <Calendar className="w-4 h-4 text-gold-400" />
+                <span>Book VIP Showroom Visit</span>
+              </button>
             </div>
           </div>
 
@@ -103,6 +105,11 @@ export default function ShowroomSection() {
 
         </div>
       </div>
+
+      <ShowroomAppointmentModal
+        isOpen={appointmentModalOpen}
+        onClose={() => setAppointmentModalOpen(false)}
+      />
     </section>
   );
 }

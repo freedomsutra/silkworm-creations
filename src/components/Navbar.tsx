@@ -66,10 +66,10 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
               <button
                 key={cat.value}
                 onClick={() => onCategorySelect(cat.value)}
-                className={`px-3.5 py-2 text-xs font-semibold uppercase tracking-wider rounded-full transition-all ${
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-full transition-all ${
                   selectedCategory === cat.value
-                    ? 'bg-emerald-900 text-gold-300 shadow-sm'
-                    : 'text-stone-700 hover:text-emerald-900 hover:bg-stone-100/70'
+                    ? 'bg-emerald-950 text-white border border-gold-400/70 shadow-sm ring-1 ring-gold-400/20'
+                    : 'text-stone-700 hover:text-emerald-950 hover:bg-stone-200/50'
                 }`}
               >
                 {cat.label}
@@ -185,9 +185,9 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
                       onCategorySelect(cat.value);
                       setMobileMenuOpen(false);
                     }}
-                    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
+                    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
                       selectedCategory === cat.value
-                        ? 'bg-emerald-900 text-gold-300'
+                        ? 'bg-emerald-950 text-white border border-gold-400/60 shadow-sm'
                         : 'text-stone-800 hover:bg-stone-200/50'
                     }`}
                   >

@@ -73,34 +73,47 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
             </div>
           </div>
 
-          {/* Right Column: Visual Showcase Card */}
+          {/* Right Column: Elevated Luxury Editorial Showcase */}
           <div className="lg:col-span-5 relative flex justify-center">
-            <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-2 border-gold-400/30 bg-emerald-900/60 group">
+            <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-gold-400/40 bg-emerald-900 group">
+              {/* Main Lifestyle Editorial Photo */}
               <img
-                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80"
-                alt="SilkWorm Creation Pure Linen Saree Draping"
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=85"
+                alt="SilkWorm Creation Handcrafted Pure Linen Saree Drape"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 filter contrast-[1.02]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/95 via-emerald-950/25 to-transparent" />
               
-              {/* Floating Badge */}
-              <div className="absolute bottom-5 inset-x-5 p-4 rounded-2xl bg-emerald-950/90 backdrop-blur-md border border-gold-400/30 text-cream-100 flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-bold text-gold-400 uppercase tracking-wider">Featured Handcraft</p>
-                  <p className="font-serif text-sm font-semibold text-cream-50">Pure Linen Zari Border Saree</p>
-                  <p className="text-xs text-cream-300 font-medium mt-0.5">₹8,699 &bull; Free Fall &amp; Pico Included</p>
-                </div>
-                <button
-                  onClick={onExploreClick}
-                  className="p-2.5 bg-gold-500 text-emerald-950 rounded-full font-bold hover:bg-gold-400 transition-colors"
-                  aria-label="View product"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+              {/* Official Silk Mark Certification Seal */}
+              <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/85 backdrop-blur-md border border-gold-400/50 text-[10px] font-bold text-gold-300 shadow-lg tracking-wider uppercase">
+                <ShieldCheck className="w-3.5 h-3.5 text-gold-400" />
+                <span>Govt. Recognized Silk Mark</span>
               </div>
 
-              <div className="absolute top-4 right-4 bg-emerald-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-gold-400/30 text-[10px] font-bold text-gold-300 tracking-wider uppercase">
-                Tricity Boutique
+              <div className="absolute top-4 right-4 bg-emerald-950/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold-400/40 text-[10px] font-bold text-cream-100 tracking-wider uppercase">
+                Tricity Flagship
+              </div>
+
+              {/* Floating Editorial Card */}
+              <div className="absolute bottom-5 inset-x-5 p-4 sm:p-5 rounded-2xl bg-emerald-950/95 backdrop-blur-md border border-gold-400/30 text-cream-100 shadow-xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Autumn / Winter Edit</span>
+                      <span className="w-1 h-1 rounded-full bg-gold-400" />
+                      <span className="text-[10px] text-green-400 font-semibold">Ready to Drape</span>
+                    </div>
+                    <p className="font-serif text-base font-bold text-cream-50 mt-0.5">Pure Linen Zari Woven Saree</p>
+                    <p className="text-xs text-cream-300 font-medium mt-0.5">₹8,699 &bull; Complimentary Fall &amp; Pico Pre-Attached</p>
+                  </div>
+                  <button
+                    onClick={onExploreClick}
+                    className="p-3 bg-gold-500 text-emerald-950 rounded-full font-bold hover:bg-gold-400 transition-transform active:scale-95 shadow-md flex-shrink-0 ml-3"
+                    aria-label="View Handcrafted Saree"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -27,6 +27,14 @@ export default function CatalogSection({
 
   const colors = ['All', 'Red', 'Black', 'Green', 'Blue', 'Pink/Purple', 'Gold/Yellow', 'Beige/Neutral'];
 
+  const colorCounts = useMemo(() => {
+    const counts: Record<string, number> = { All: products.length };
+    products.forEach((p) => {
+      counts[p.primaryColor] = (counts[p.primaryColor] || 0) + 1;
+    });
+    return counts;
+  }, [products]);
+
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       // Category match
@@ -169,19 +177,27 @@ export default function CatalogSection({
             <Filter className="w-3.5 h-3.5 text-gold-600" />
             <span>Palette:</span>
           </span>
-          {colors.map((c) => (
-            <button
-              key={c}
-              onClick={() => setSelectedColor(c)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedColor === c
-                  ? 'bg-emerald-900 text-gold-300'
-                  : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
-              }`}
-            >
-              {c}
-            </button>
-          ))}
+          {colors.map((c) => {
+            const count = colorCounts[c] || 0;
+            return (
+              <button
+                key={c}
+                onClick={() => setSelectedColor(c)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                  selectedColor === c
+                    ? 'bg-emerald-950 text-white border border-gold-400/60 shadow-sm ring-1 ring-gold-400/20'
+                    : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                }`}
+              >
+                <span>{c}</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                  selectedColor === c ? 'bg-gold-500 text-emerald-950' : 'bg-stone-200 text-stone-600'
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

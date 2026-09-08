@@ -39,6 +39,9 @@ export interface Review {
   comment: string;
   verified: boolean;
   productName: string;
+  clientPhoto: string;
+  source: string;
+  socialTag: string;
 }
 
 export type Currency = 'INR' | 'USD' | 'CAD' | 'GBP' | 'AED';

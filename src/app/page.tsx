@@ -20,6 +20,7 @@ import ReviewsSection from '@/components/ReviewsSection';
 import FAQSection from '@/components/FAQSection';
 import ShowroomSection from '@/components/ShowroomSection';
 import WhatsAppFloatingButton from '@/components/WhatsAppFloatingButton';
+import StickyMobileBar from '@/components/StickyMobileBar';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -81,6 +82,7 @@ export default function Home() {
       <Footer />
 
       <WhatsAppFloatingButton />
+      <StickyMobileBar onBookVideoCall={() => setVideoConsultationOpen(true)} />
 
       {/* Interactive Modals */}
       <ProductDetailModal 

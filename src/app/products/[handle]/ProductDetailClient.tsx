@@ -5,11 +5,12 @@ import { SareeProduct } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { 
   Star, Sun, Lightbulb, Video, ShoppingBag, Zap, Heart, 
-  Share2, Scissors, Truck, ShieldCheck, Check, Sparkles, MapPin, ChevronDown 
+  Share2, Scissors, Truck, ShieldCheck, Check, Sparkles, MapPin, ChevronDown, RefreshCw 
 } from 'lucide-react';
 import Link from 'next/link';
 import DrapeVideoModal from '@/components/DrapeVideoModal';
 import WhatsAppVideoModal from '@/components/WhatsAppVideoModal';
+import StickyMobileBar from '@/components/StickyMobileBar';
 
 export default function ProductDetailClient({ 
   product, 
@@ -168,9 +169,23 @@ export default function ProductDetailClient({
                 {formatPrice(product.originalPrice)}
               </span>
               <span className="px-2 py-0.5 text-xs font-bold text-emerald-800 bg-emerald-100 rounded-md">
-                Taxes Included
-              </span>
-            </div>
+                  Tax Included
+                </span>
+              </div>
+
+              {/* Govt Recognized Silk Mark Seal */}
+              <div className="mt-3 flex items-center gap-3 p-3 rounded-2xl bg-amber-50/80 border border-gold-500/40 text-emerald-950">
+                <div className="p-2 bg-gold-500 text-emerald-950 rounded-xl font-bold flex-shrink-0 shadow-xs">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                    <span>Govt. Recognized Silk Mark Certified</span>
+                    <span className="px-1.5 py-0.5 bg-emerald-950 text-gold-300 text-[9px] font-bold rounded">100% Pure Weave</span>
+                  </p>
+                  <p className="text-[11px] text-stone-600">Pure natural yarns with handloom artisan verification.</p>
+                </div>
+              </div>
           </div>
 
           <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
@@ -313,9 +328,28 @@ export default function ProductDetailClient({
               className="w-full py-3.5 px-4 rounded-2xl border border-emerald-900/30 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
             >
               <Video className="w-4 h-4 text-green-600 animate-pulse" />
-              <span>Book 1-on-1 Video Consultation on WhatsApp</span>
-            </a>
-          </div>
+              <span>Book 1-on-1 Video Call on WhatsApp to Inspect Saree</span>
+              </a>
+
+              {/* 7-Day Exchange Trust Guarantee */}
+              <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-cream-100/90 border border-stone-200 text-center text-[10px] text-stone-700">
+                <div className="flex flex-col items-center gap-1">
+                  <RefreshCw className="w-3.5 h-3.5 text-emerald-800" />
+                  <span className="font-bold text-stone-900">7-Day Exchange</span>
+                  <span className="text-[9px] text-stone-500">Doorstep pickup</span>
+                </div>
+                <div className="flex flex-col items-center gap-1 border-x border-stone-200">
+                  <Sparkles className="w-3.5 h-3.5 text-gold-600" />
+                  <span className="font-bold text-stone-900">Free Fall &amp; Pico</span>
+                  <span className="text-[9px] text-stone-500">Pre-finished drape</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-800" />
+                  <span className="font-bold text-stone-900">Transit Insured</span>
+                  <span className="text-[9px] text-stone-500">100% Protection</span>
+                </div>
+              </div>
+            </div>
 
         </div>
 
@@ -347,6 +381,12 @@ export default function ProductDetailClient({
           setDrapeOpen(false);
           setVideoConsultationOpen(true);
         }}
+      />
+
+      <StickyMobileBar 
+        product={product} 
+        onBookVideoCall={() => setVideoConsultationOpen(true)} 
+        onInstantBuy={() => triggerInstantCheckout(product)} 
       />
 
       <WhatsAppVideoModal

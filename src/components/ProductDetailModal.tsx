@@ -5,7 +5,7 @@ import { SareeProduct } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { 
   X, Star, Sun, Lightbulb, Video, ShoppingBag, Zap, 
-  ShieldCheck, Scissors, Truck, MapPin, Sparkles, CheckCircle2, MessageCircle
+  ShieldCheck, Scissors, Truck, MapPin, Sparkles, CheckCircle2, MessageCircle, RefreshCw
 } from 'lucide-react';
 
 interface ProductDetailModalProps {
@@ -169,6 +169,20 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
                   Tax Included
                 </span>
               </div>
+
+              {/* Govt Recognized Silk Mark Seal */}
+              <div className="mt-3 flex items-center gap-3 p-3 rounded-2xl bg-amber-50/80 border border-gold-500/40 text-emerald-950">
+                <div className="p-2 bg-gold-500 text-emerald-950 rounded-xl font-bold flex-shrink-0 shadow-xs">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                    <span>Govt. Recognized Silk Mark Certified</span>
+                    <span className="px-1.5 py-0.5 bg-emerald-950 text-gold-300 text-[9px] font-bold rounded">100% Pure Weave</span>
+                  </p>
+                  <p className="text-[11px] text-stone-600">Pure natural yarns with handloom artisan verification.</p>
+                </div>
+              </div>
             </div>
 
             <p className="text-xs text-stone-600 leading-relaxed">
@@ -315,6 +329,25 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
                 <Video className="w-4 h-4 text-green-600 animate-pulse" />
                 <span>Book 1-on-1 Video Call on WhatsApp to Inspect Saree</span>
               </a>
+
+              {/* 7-Day Exchange Trust Guarantee */}
+              <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-cream-100/90 border border-stone-200 text-center text-[10px] text-stone-700">
+                <div className="flex flex-col items-center gap-1">
+                  <RefreshCw className="w-3.5 h-3.5 text-emerald-800" />
+                  <span className="font-bold text-stone-900">7-Day Exchange</span>
+                  <span className="text-[9px] text-stone-500">Doorstep pickup</span>
+                </div>
+                <div className="flex flex-col items-center gap-1 border-x border-stone-200">
+                  <Sparkles className="w-3.5 h-3.5 text-gold-600" />
+                  <span className="font-bold text-stone-900">Free Fall &amp; Pico</span>
+                  <span className="text-[9px] text-stone-500">Pre-finished drape</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-800" />
+                  <span className="font-bold text-stone-900">Transit Insured</span>
+                  <span className="text-[9px] text-stone-500">100% Protection</span>
+                </div>
+              </div>
             </div>
 
           </div>
