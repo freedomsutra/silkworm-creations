@@ -11,10 +11,13 @@ import CatalogSection from '@/components/CatalogSection';
 import ProductDetailModal from '@/components/ProductDetailModal';
 import FastCheckoutModal from '@/components/FastCheckoutModal';
 import CartDrawer from '@/components/CartDrawer';
+import WishlistDrawer from '@/components/WishlistDrawer';
+import TrackOrderModal from '@/components/TrackOrderModal';
 import DrapeVideoModal from '@/components/DrapeVideoModal';
 import WhatsAppVideoModal from '@/components/WhatsAppVideoModal';
 import ShopTheGram from '@/components/ShopTheGram';
 import ReviewsSection from '@/components/ReviewsSection';
+import FAQSection from '@/components/FAQSection';
 import ShowroomSection from '@/components/ShowroomSection';
 import WhatsAppFloatingButton from '@/components/WhatsAppFloatingButton';
 import Footer from '@/components/Footer';
@@ -42,25 +45,20 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col bg-cream-50">
-      {/* Top Announcement Bar */}
       <AnnouncementBar />
 
-      {/* Header & Sticky Navigation */}
       <Navbar 
         onCategorySelect={handleCategorySelect}
         selectedCategory={selectedCategory}
       />
 
-      {/* Hero Visual Section */}
       <HeroBanner 
         onExploreClick={handleExploreClick}
         onBookVideoCall={() => setVideoConsultationOpen(true)}
       />
 
-      {/* Trust & Guarantee Badges */}
       <TrustBadges />
 
-      {/* Main Saree Catalog with Search, Filters & Quick Actions */}
       <CatalogSection 
         products={PRODUCTS}
         selectedCategory={selectedCategory}
@@ -69,22 +67,19 @@ export default function Home() {
         onWatchDrape={(p) => setActiveProductForDrape(p)}
       />
 
-      {/* Instagram Social Commerce ("Shop The 'Gram") */}
       <ShopTheGram 
         products={PRODUCTS}
         onSelectProduct={(p) => setActiveProductForModal(p)}
       />
 
-      {/* Verified Client Reviews */}
       <ReviewsSection />
 
-      {/* Physical Showroom & Boutique Location */}
+      <FAQSection />
+
       <ShowroomSection />
 
-      {/* Footer */}
       <Footer />
 
-      {/* Floating WhatsApp Concierge Widget */}
       <WhatsAppFloatingButton />
 
       {/* Interactive Modals */}
@@ -111,11 +106,13 @@ export default function Home() {
         onClose={() => setVideoConsultationOpen(false)}
       />
 
-      {/* Fast 1-Click Checkout Modal (GoKwik / Fastrr inspired) */}
       <FastCheckoutModal />
 
-      {/* Slide-in Cart Drawer */}
       <CartDrawer />
+
+      <WishlistDrawer onQuickView={(p) => setActiveProductForModal(p)} />
+
+      <TrackOrderModal />
     </main>
   );
 }

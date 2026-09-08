@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShoppingBag, Search, Menu, X, Phone, Heart, Sparkles, MapPin, Video } from 'lucide-react';
+import { ShoppingBag, Search, Menu, X, Phone, Heart, Sparkles, MapPin, Video, Globe, Truck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { Currency } from '@/types';
+import Link from 'next/link';
 
 interface NavbarProps {
   onCategorySelect: (cat: string) => void;
@@ -10,10 +12,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onCategorySelect, selectedCategory }: NavbarProps) {
-  const { totalItems, openCart } = useCart();
+  const { totalItems, openCart, wishlist, openWishlist, currency, setCurrency, openTrackModal } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const categories = [
     { label: 'All Sarees', value: 'All' },
@@ -28,28 +28,37 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
     <header className="sticky top-0 z-40 bg-cream-50/95 backdrop-blur-md border-b border-stone-200/80 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Mobile Menu Trigger */}
-          <div className="flex items-center lg:hidden">
+          
+          {/* Mobile Menu Trigger & Wishlist */}
+          <div className="flex items-center gap-1 lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="p-2 -ml-2 text-stone-800 hover:text-emerald-900 rounded-md focus:outline-none"
+              className="p-2 -ml-2 text-stone-800 hover:text-emerald-900 rounded-md"
               aria-label="Open menu"
             >
               <Menu className="w-6 h-6" />
             </button>
+            <button
+              onClick={openWishlist}
+              className="relative p-2 text-stone-700 hover:text-rose-600"
+              aria-label="View Wishlist"
+            >
+              <Heart className="w-5 h-5" />
+              {wishlist.length > 0 && (
+                <span className="absolute 1 top-1 right-1 w-2 h-2 bg-rose-500 rounded-full" />
+              )}
+            </button>
           </div>
 
           {/* Brand Logo & Emblem */}
-          <div className="flex flex-col items-center justify-center cursor-pointer" onClick={() => onCategorySelect('All')}>
-            <div className="flex items-center gap-1.5">
-              <span className="font-serif text-2xl sm:text-3xl font-bold tracking-wider text-emerald-950">
-                SILKWORM
-              </span>
-            </div>
-            <span className="text-[9px] sm:text-[10px] font-sans uppercase tracking-[0.35em] text-gold-700 font-semibold -mt-1">
-              CREATION • CHANDIGARH
+          <Link href="/" className="flex flex-col items-center justify-center cursor-pointer" onClick={() => onCategorySelect('All')}>
+            <span className="font-serif text-2xl sm:text-3xl font-bold tracking-wider text-emerald-950">
+              SILKWORM
             </span>
-          </div>
+            <span className="text-[9px] sm:text-[10px] font-sans uppercase tracking-[0.35em] text-gold-700 font-semibold -mt-1">
+              CREATION &bull; CHANDIGARH
+            </span>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
@@ -70,14 +79,47 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
 
           {/* Right Action Icons */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            <a
-              href="tel:+917876719360"
-              className="hidden sm:flex items-center gap-1 text-xs font-medium text-stone-700 hover:text-emerald-900 px-2.5 py-1.5 rounded-full border border-stone-300/70"
-              title="Call our Showroom"
+            
+            {/* Currency Switcher */}
+            <div className="hidden sm:flex items-center gap-1 border border-stone-300/80 rounded-full px-2.5 py-1 bg-white text-xs">
+              <Globe className="w-3.5 h-3.5 text-stone-400" />
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value as Currency)}
+                className="bg-transparent text-stone-800 font-bold focus:outline-none cursor-pointer text-xs"
+              >
+                <option value="INR">INR (₹)</option>
+                <option value="USD">USD ($)</option>
+                <option value="CAD">CAD (CA$)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="AED">AED (د.إ)</option>
+              </select>
+            </div>
+
+            {/* Track Order Button */}
+            <button
+              onClick={openTrackModal}
+              className="hidden md:flex items-center gap-1 text-xs font-semibold text-stone-700 hover:text-emerald-900 px-2.5 py-1.5 rounded-full border border-stone-300/70 bg-white"
+              title="Track Saree Order"
             >
-              <Phone className="w-3.5 h-3.5 text-gold-600" />
-              <span>+91 78767 19360</span>
-            </a>
+              <Truck className="w-3.5 h-3.5 text-emerald-800" />
+              <span>Track</span>
+            </button>
+
+            {/* Wishlist Button (Desktop) */}
+            <button
+              onClick={openWishlist}
+              className="hidden lg:flex relative p-2.5 text-stone-700 hover:text-rose-600 rounded-full hover:bg-stone-100 transition-colors"
+              aria-label="View Wishlist"
+              title="Saved Sarees"
+            >
+              <Heart className="w-5 h-5" />
+              {wishlist.length > 0 && (
+                <span className="absolute 1 top-1 right-1 bg-rose-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {wishlist.length}
+                </span>
+              )}
+            </button>
 
             {/* Cart Button */}
             <button
@@ -118,8 +160,24 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
                 </button>
               </div>
 
+              {/* Mobile Currency Selector */}
+              <div className="mt-4 p-3 bg-white rounded-xl border border-stone-200 flex items-center justify-between text-xs">
+                <span className="font-medium text-stone-600">Select Currency:</span>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value as Currency)}
+                  className="font-bold text-emerald-950 bg-stone-50 border border-stone-200 rounded-lg px-2 py-1"
+                >
+                  <option value="INR">INR (₹)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="CAD">CAD (CA$)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="AED">AED (د.إ)</option>
+                </select>
+              </div>
+
               <div className="mt-6 space-y-1">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-3 mb-2">Explore Collections</p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-3 mb-2">Collections</p>
                 {categories.map((cat) => (
                   <button
                     key={cat.value}
@@ -138,37 +196,36 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
                 ))}
               </div>
 
-              <div className="mt-8 pt-6 border-t border-stone-200 space-y-3">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-1 mb-2">Showroom &amp; Assistance</p>
-                
+              <div className="mt-6 pt-4 border-t border-stone-200 space-y-2">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openTrackModal();
+                  }}
+                  className="w-full flex items-center gap-3 p-3 bg-stone-100 rounded-xl font-semibold text-xs text-stone-800"
+                >
+                  <Truck className="w-4 h-4 text-emerald-800" />
+                  <span>Track Saree Dispatch</span>
+                </button>
+
                 <a
                   href="https://wa.me/917876719360?text=Hi%20SilkWorm%20Creation,%20I%20would%20like%20to%20book%20a%201-on-1%20video%20call%20to%20see%20your%20sarees"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-emerald-900/10 text-emerald-950 rounded-xl font-medium text-xs hover:bg-emerald-900/15"
+                  className="flex items-center gap-3 p-3 bg-emerald-900/10 text-emerald-950 rounded-xl font-semibold text-xs"
                 >
                   <Video className="w-4 h-4 text-emerald-800" />
-                  <span>1-on-1 WhatsApp Video Draping</span>
+                  <span>Book WhatsApp Video Call</span>
                 </a>
 
                 <a
                   href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-stone-100 text-stone-800 rounded-xl font-medium text-xs hover:bg-stone-200"
+                  className="flex items-center gap-3 p-3 bg-stone-100 text-stone-800 rounded-xl font-medium text-xs"
                 >
                   <MapPin className="w-4 h-4 text-gold-700" />
                   <span>SCO 2, Reliance Square, Zirakpur</span>
-                </a>
-
-                <a
-                  href="https://www.instagram.com/silkwormcreation/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-stone-100 text-stone-800 rounded-xl font-medium text-xs hover:bg-stone-200"
-                >
-                  <span className="font-bold text-xs text-pink-600">IG</span>
-                  <span>Follow @silkwormcreation</span>
                 </a>
               </div>
             </div>
@@ -176,7 +233,7 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
             <div className="pt-6 border-t border-stone-200 text-xs text-stone-500">
               <p className="font-medium text-stone-800">Showroom Hours:</p>
               <p>Mon - Sun: 11:00 AM - 8:00 PM</p>
-              <p className="mt-2 text-[10px] text-stone-400">GSTIN: 06ADFPH4354N1ZD</p>
+              <p className="mt-1 text-[10px] text-stone-400">GSTIN: 06ADFPH4354N1ZD</p>
             </div>
           </div>
         </div>

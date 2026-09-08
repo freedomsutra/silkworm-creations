@@ -1,7 +1,15 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { SareeProduct, CartItem } from '@/types';
+import { SareeProduct, CartItem, Currency, CurrencyRate } from '@/types';
+
+export const CURRENCIES: Record<Currency, CurrencyRate> = {
+  INR: { code: 'INR', symbol: '₹', rate: 1 },
+  USD: { code: 'USD', symbol: '$', rate: 0.012 },
+  CAD: { code: 'CAD', symbol: 'CA$', rate: 0.016 },
+  GBP: { code: 'GBP', symbol: '£', rate: 0.0094 },
+  AED: { code: 'AED', symbol: 'AED ', rate: 0.044 },
+};
 
 interface CartContextType {
   items: CartItem[];
@@ -18,6 +26,24 @@ interface CartContextType {
   closeCheckout: () => void;
   selectedProductForCheckout?: SareeProduct;
   triggerInstantCheckout: (product: SareeProduct) => void;
+  
+  // Wishlist
+  wishlist: number[];
+  toggleWishlist: (productId: number) => void;
+  isWishlisted: (productId: number) => boolean;
+  wishlistDrawerOpen: boolean;
+  openWishlist: () => void;
+  closeWishlist: () => void;
+
+  // Currency
+  currency: Currency;
+  setCurrency: (c: Currency) => void;
+  formatPrice: (inrAmount: number) => string;
+
+  // Order Tracking
+  trackModalOpen: boolean;
+  openTrackModal: () => void;
+  closeTrackModal: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -27,33 +53,69 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
   const [selectedProductForCheckout, setSelectedProductForCheckout] = useState<SareeProduct | undefined>(undefined);
+  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [wishlistDrawerOpen, setWishlistDrawerOpen] = useState(false);
+  const [currency, setCurrencyState] = useState<Currency>('INR');
+  const [trackModalOpen, setTrackModalOpen] = useState(false);
 
-  // Load from local storage
+  // Load from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('silkworm_cart');
-      if (saved) setItems(jsonParse(saved));
-    } catch (e) {
-      // ignore
-    }
-  }, []);
+      const savedCart = localStorage.getItem('silkworm_cart');
+      if (savedCart) setItems(JSON.parse(savedCart));
 
-  const jsonParse = (val: string) => {
-    try { return JSON.parse(val); } catch { return []; }
-  };
+      const savedWish = localStorage.getItem('silkworm_wishlist');
+      if (savedWish) setWishlist(JSON.parse(savedWish));
+
+      const savedCur = localStorage.getItem('silkworm_currency') as Currency;
+      if (savedCur && CURRENCIES[savedCur]) setCurrencyState(savedCur);
+    } catch (e) {}
+  }, []);
 
   useEffect(() => {
     try {
       localStorage.setItem('silkworm_cart', JSON.stringify(items));
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
   }, [items]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('silkworm_wishlist', JSON.stringify(wishlist));
+    } catch (e) {}
+  }, [wishlist]);
+
+  const setCurrency = (c: Currency) => {
+    setCurrencyState(c);
+    try { localStorage.setItem('silkworm_currency', c); } catch (e) {}
+  };
+
+  const formatPrice = (inrAmount: number): string => {
+    const cur = CURRENCIES[currency];
+    if (currency === 'INR') {
+      return `₹${Math.round(inrAmount).toLocaleString('en-IN')}`;
+    }
+    const converted = Math.round(inrAmount * cur.rate);
+    return `${cur.symbol}${converted.toLocaleString()}`;
+  };
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  const addItem = (product: SareeProduct, fallPico = true, blouseStitching = false, blouseSize = 'Standard 36-38') => {
+  const toggleWishlist = (productId: number) => {
+    setWishlist(prev => 
+      prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
+    );
+  };
+
+  const isWishlisted = (productId: number) => wishlist.includes(productId);
+
+  const openWishlist = () => setWishlistDrawerOpen(true);
+  const closeWishlist = () => setWishlistDrawerOpen(false);
+
+  const openTrackModal = () => setTrackModalOpen(true);
+  const closeTrackModal = () => setTrackModalOpen(false);
+
+  const addItem = (product: SareeProduct, fallPico = true, blouseStitching = false, blouseSize = 'Standard 38') => {
     setItems(prev => {
       const existing = prev.find(item => item.product.id === product.id);
       if (existing) {
@@ -121,6 +183,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       closeCheckout,
       selectedProductForCheckout,
       triggerInstantCheckout,
+      wishlist,
+      toggleWishlist,
+      isWishlisted,
+      wishlistDrawerOpen,
+      openWishlist,
+      closeWishlist,
+      currency,
+      setCurrency,
+      formatPrice,
+      trackModalOpen,
+      openTrackModal,
+      closeTrackModal,
     }}>
       {children}
     </CartContext.Provider>

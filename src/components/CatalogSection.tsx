@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { SareeProduct } from '@/types';
 import ProductCard from './ProductCard';
-import { SlidersHorizontal, Search, Sparkles, Filter, X } from 'lucide-react';
+import { SlidersHorizontal, Search, Sparkles, Filter, X, Tag } from 'lucide-react';
 
 interface CatalogSectionProps {
   products: SareeProduct[];
@@ -23,7 +23,7 @@ export default function CatalogSection({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedColor, setSelectedColor] = useState('All');
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'rating'>('featured');
-  const [maxPrice, setMaxPrice] = useState<number>(15000);
+  const [priceBand, setPriceBand] = useState<'all' | 'under-8500' | '8500-10000' | 'above-10000'>('all');
 
   const colors = ['All', 'Red', 'Black', 'Green', 'Blue', 'Pink/Purple', 'Gold/Yellow', 'Beige/Neutral'];
 
@@ -43,8 +43,10 @@ export default function CatalogSection({
         return false;
       }
 
-      // Max price
-      if (p.price > maxPrice) return false;
+      // Price band
+      if (priceBand === 'under-8500' && p.price >= 8500) return false;
+      if (priceBand === '8500-10000' && (p.price < 8500 || p.price > 10000)) return false;
+      if (priceBand === 'above-10000' && p.price <= 10000) return false;
 
       // Search
       if (searchQuery.trim()) {
@@ -63,7 +65,7 @@ export default function CatalogSection({
       if (sortBy === 'rating') return b.rating - a.rating;
       return 0;
     });
-  }, [products, selectedCategory, selectedColor, maxPrice, searchQuery, sortBy]);
+  }, [products, selectedCategory, selectedColor, priceBand, searchQuery, sortBy]);
 
   return (
     <section id="catalog-section" className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,7 +84,7 @@ export default function CatalogSection({
       </div>
 
       {/* Filter and Search Controls */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-stone-200/80 shadow-sm mb-8 space-y-4">
+      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-sm mb-8 space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
           
           {/* Search Input */}
@@ -93,7 +95,7 @@ export default function CatalogSection({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by weave, color, occasion..."
-              className="w-full pl-10 pr-8 py-2 text-xs rounded-xl bg-stone-50 border border-stone-200 focus:outline-none focus:border-gold-500 transition-colors"
+              className="w-full pl-10 pr-8 py-2.5 text-xs rounded-xl bg-stone-50 border border-stone-200 focus:outline-none focus:border-gold-500 transition-colors"
             />
             {searchQuery && (
               <button 
@@ -103,6 +105,46 @@ export default function CatalogSection({
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
+          </div>
+
+          {/* Budget Filter Buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1">
+            <span className="text-xs text-stone-500 font-semibold flex items-center gap-1 flex-shrink-0">
+              <Tag className="w-3.5 h-3.5 text-gold-600" />
+              <span>Budget:</span>
+            </span>
+            <button
+              onClick={() => setPriceBand('all')}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+                priceBand === 'all' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+              }`}
+            >
+              All Prices
+            </button>
+            <button
+              onClick={() => setPriceBand('under-8500')}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+                priceBand === 'under-8500' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+              }`}
+            >
+              Under ₹8,500
+            </button>
+            <button
+              onClick={() => setPriceBand('8500-10000')}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+                priceBand === '8500-10000' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+              }`}
+            >
+              ₹8,500 - ₹10,000
+            </button>
+            <button
+              onClick={() => setPriceBand('above-10000')}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
+                priceBand === 'above-10000' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+              }`}
+            >
+              ₹10,000+ Luxury
+            </button>
           </div>
 
           {/* Sort Selector */}
@@ -148,12 +190,13 @@ export default function CatalogSection({
         <div className="text-center py-16 bg-white rounded-2xl border border-stone-200 p-8">
           <p className="font-serif text-lg font-bold text-emerald-950 mb-2">No Sarees Found</p>
           <p className="text-xs text-stone-500 max-w-sm mx-auto mb-4">
-            We couldn't find any sarees matching your filters. Try clearing your search query or selecting "All Sarees".
+            We couldn't find any sarees matching your filters. Try resetting your search query or selecting "All Sarees".
           </p>
           <button
             onClick={() => {
               setSearchQuery('');
               setSelectedColor('All');
+              setPriceBand('all');
               onCategoryChange('All');
             }}
             className="px-5 py-2.5 rounded-full bg-emerald-900 text-gold-300 text-xs font-bold"

@@ -40,3 +40,11 @@ export interface Review {
   verified: boolean;
   productName: string;
 }
+
+export type Currency = 'INR' | 'USD' | 'CAD' | 'GBP' | 'AED';
+
+export interface CurrencyRate {
+  code: Currency;
+  symbol: string;
+  rate: number; // relative to INR
+}

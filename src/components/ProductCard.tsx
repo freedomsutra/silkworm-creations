@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { SareeProduct } from '@/types';
 import { useCart } from '@/context/CartContext';
-import { Eye, ShoppingBag, Zap, Video, Star, Sparkles, Check } from 'lucide-react';
+import { Eye, ShoppingBag, Zap, Video, Star, Sparkles, Check, Heart, Share2 } from 'lucide-react';
+import Link from 'next/link';
 
 interface ProductCardProps {
   product: SareeProduct;
@@ -12,9 +13,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onQuickView, onWatchDrape }: ProductCardProps) {
-  const { addItem, triggerInstantCheckout } = useCart();
+  const { addItem, triggerInstantCheckout, isWishlisted, toggleWishlist, formatPrice } = useCart();
   const [added, setAdded] = useState(false);
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -26,6 +26,13 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
   const handleInstantBuy = (e: React.MouseEvent) => {
     e.stopPropagation();
     triggerInstantCheckout(product);
+  };
+
+  const handleShareWhatsApp = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/products/${product.handle}` : '';
+    const text = encodeURIComponent(`Look at this authentic ${product.title} from SilkWorm Creation: ${url}`);
+    window.open(`https://wa.me/?text=${text}`, '_blank');
   };
 
   const discountPercent = Math.round(
@@ -40,7 +47,7 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
       {/* Product Image Container */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
         <img
-          src={product.images[currentImgIndex] || product.images[0] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80'}
+          src={product.images[0] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80'}
           alt={product.title}
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
@@ -58,13 +65,36 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           )}
         </div>
 
+        {/* Wishlist & Share Quick Icons */}
+        <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-10">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleWishlist(product.id);
+            }}
+            className="p-2 bg-white/90 backdrop-blur-md rounded-full text-stone-700 hover:text-rose-500 shadow-sm transition-transform active:scale-90"
+            aria-label="Save to Wishlist"
+            title="Save to Wishlist"
+          >
+            <Heart className={`w-4 h-4 ${isWishlisted(product.id) ? 'fill-current text-rose-500' : ''}`} />
+          </button>
+          <button
+            onClick={handleShareWhatsApp}
+            className="p-2 bg-white/90 backdrop-blur-md rounded-full text-stone-700 hover:text-green-600 shadow-sm transition-transform active:scale-90"
+            aria-label="Share on WhatsApp"
+            title="Share on WhatsApp"
+          >
+            <Share2 className="w-4 h-4" />
+          </button>
+        </div>
+
         {/* Complimentary Fall & Pico Ribbon */}
         <div className="absolute bottom-3 left-3 right-3 py-1 px-2.5 rounded-lg bg-cream-50/90 backdrop-blur-md border border-gold-500/30 text-[10px] font-semibold text-emerald-950 flex items-center justify-between">
           <span className="flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-gold-600" />
             <span>Free Fall &amp; Pico Done</span>
           </span>
-          <span className="text-[9px] text-stone-500">Unstitched Blouse</span>
+          <span className="text-[9px] text-stone-500">Ready to Drape</span>
         </div>
 
         {/* Floating Quick Action Overlay on Desktop */}
@@ -80,24 +110,21 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           >
             <Video className="w-4 h-4 text-emerald-900" />
           </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onQuickView(product);
-            }}
+          <Link
+            href={`/products/${product.handle}`}
+            onClick={(e) => e.stopPropagation()}
             className="p-3 bg-white text-emerald-950 rounded-full hover:bg-gold-500 transition-colors shadow-md"
-            title="Quick View &amp; Daylight Light Switcher"
-            aria-label="Quick View"
+            title="Open Dedicated Page"
+            aria-label="Open Dedicated Page"
           >
             <Eye className="w-4 h-4 text-emerald-900" />
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* Product Content Details */}
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>
-          {/* Star Rating & Reviews */}
           <div className="flex items-center gap-1 mb-1.5">
             <div className="flex items-center text-amber-500">
               <Star className="w-3.5 h-3.5 fill-current" />
@@ -106,7 +133,7 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
             <span className="text-[11px] text-stone-400">({product.reviewsCount} reviews)</span>
           </div>
 
-          <h3 className="font-serif text-sm sm:text-base font-bold text-stone-900 line-clamp-2 group-hover:text-emerald-900 transition-colors">
+          <h3 className="font-serif text-sm sm:text-base font-bold text-stone-900 line-clamp-2 group-hover:text-emerald-950 transition-colors">
             {product.title}
           </h3>
 
@@ -120,10 +147,10 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
         <div className="mt-4 pt-3 border-t border-stone-100">
           <div className="flex items-baseline gap-2 mb-3">
             <span className="text-base sm:text-lg font-bold text-emerald-950">
-              ₹{product.price.toLocaleString('en-IN')}
+              {formatPrice(product.price)}
             </span>
             <span className="text-xs text-stone-400 line-through">
-              ₹{product.originalPrice.toLocaleString('en-IN')}
+              {formatPrice(product.originalPrice)}
             </span>
           </div>
 
