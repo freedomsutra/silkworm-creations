@@ -13,7 +13,17 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onCategorySelect, selectedCategory }: NavbarProps) {
-  const { totalItems, openCart, wishlist, openWishlist, currency, setCurrency, openTrackModal } = useCart();
+  const { 
+    totalItems, 
+    openCart, 
+    wishlist, 
+    openWishlist, 
+    currency, 
+    setCurrency, 
+    openTrackModal,
+    isDomestic,
+    destinationCountry
+  } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -73,24 +83,44 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
 
           {/* Left: Desktop Quick Concierge Links */}
           <div className="hidden lg:flex items-center gap-5 text-xs text-stone-600 font-medium">
-            <a
-              href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-emerald-950 transition-colors"
-            >
-              <MapPin className="w-3.5 h-3.5 text-gold-600" />
-              <span>Zirakpur Flagship</span>
-            </a>
-            <span className="text-stone-300">&bull;</span>
-            <button
-              onClick={openTrackModal}
-              className="flex items-center gap-1.5 hover:text-emerald-950 transition-colors"
-            >
-              <Truck className="w-3.5 h-3.5 text-emerald-800" />
-              <span>Track Finishing</span>
-            </button>
+            {isDomestic ? (
+              <>
+                <a
+                  href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-emerald-950 transition-colors"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-gold-600" />
+                  <span>Zirakpur Flagship</span>
+                </a>
+                <span className="text-stone-300">&bull;</span>
+                <button
+                  onClick={openTrackModal}
+                  className="flex items-center gap-1.5 hover:text-emerald-950 transition-colors"
+                >
+                  <Truck className="w-3.5 h-3.5 text-emerald-800" />
+                  <span>Track Dispatch</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="flex items-center gap-1.5 text-emerald-950 font-semibold">
+                  <span className="text-gold-600">✈️</span>
+                  <span>DHL Express to {destinationCountry}</span>
+                </span>
+                <span className="text-stone-300">&bull;</span>
+                <button
+                  onClick={openTrackModal}
+                  className="flex items-center gap-1.5 hover:text-emerald-950 transition-colors"
+                >
+                  <Truck className="w-3.5 h-3.5 text-emerald-800" />
+                  <span>Track Global Parcel</span>
+                </button>
+              </>
+            )}
           </div>
+
 
           {/* Center: Luxury Brand Monogram & Wordmark */}
           <Link
@@ -272,7 +302,7 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
             {/* VIP Concierge Shortcuts */}
             <div className="mt-6 pt-4 border-t border-stone-200/80 space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400 px-3 mb-1">
-                Concierge &amp; Showroom
+                {isDomestic ? 'Concierge & Showroom' : 'Global Concierge & Logistics'}
               </p>
 
               <a
@@ -282,7 +312,7 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
                 className="flex items-center gap-3 p-3 bg-emerald-950 text-gold-300 rounded-xl font-semibold text-xs shadow-xs"
               >
                 <Video className="w-4 h-4 text-green-400" />
-                <span>Book WhatsApp Daylight Drape</span>
+                <span>{isDomestic ? 'Book WhatsApp Daylight Drape' : `Video Salon Drape (${currency} Timezone)`}</span>
               </a>
 
               <button
@@ -293,7 +323,7 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
                 className="w-full flex items-center gap-3 p-3 bg-white border border-stone-200 text-stone-800 rounded-xl font-semibold text-xs"
               >
                 <Truck className="w-4 h-4 text-emerald-800" />
-                <span>Track Saree Dispatch</span>
+                <span>{isDomestic ? 'Track Saree Dispatch' : `Track DHL Parcel (${destinationCountry})`}</span>
               </button>
 
               <a
@@ -303,10 +333,11 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
                 className="flex items-center gap-3 p-3 bg-white border border-stone-200 text-stone-800 rounded-xl font-medium text-xs"
               >
                 <MapPin className="w-4 h-4 text-gold-700" />
-                <span className="truncate">SCO 2, Reliance Sq, Zirakpur</span>
+                <span className="truncate">{isDomestic ? 'SCO 2, Reliance Sq, Zirakpur' : 'Visiting Punjab? Flagship Fitting'}</span>
               </a>
             </div>
           </div>
+
 
           {/* Drawer Footer */}
           <div className="pt-6 border-t border-stone-200 text-xs text-stone-500 space-y-1">

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { SareeProduct } from '@/types';
 import { useCart } from '@/context/CartContext';
-import { Eye, ShoppingBag, Zap, Video, Star, Sparkles, Check, Heart, Share2, ShieldCheck } from 'lucide-react';
+import { Eye, ShoppingBag, Zap, Video, Star, Sparkles, Check, Heart, Share2, ShieldCheck, Plane } from 'lucide-react';
 import Link from 'next/link';
 
 interface ProductCardProps {
@@ -19,8 +19,9 @@ function shortFabric(fabric: string): string {
 }
 
 export default function ProductCard({ product, onQuickView, onWatchDrape }: ProductCardProps) {
-  const { addItem, triggerInstantCheckout, isWishlisted, toggleWishlist, formatPrice } = useCart();
+  const { addItem, triggerInstantCheckout, isWishlisted, toggleWishlist, formatPrice, isDomestic, destinationCountry, currency } = useCart();
   const [added, setAdded] = useState(false);
+
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -105,14 +106,26 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           </button>
         </div>
 
-        {/* Complimentary Fall & Pico Ribbon (Mobile Safe) */}
+        {/* Complimentary Fall & Pico Ribbon (Personalized) */}
         <div className="absolute bottom-2.5 left-2.5 right-2.5 py-1 px-2.5 rounded-xl bg-cream-50/95 backdrop-blur-md border border-gold-500/30 text-[9px] sm:text-[10px] font-semibold text-emerald-950 flex items-center justify-between z-10 shadow-2xs overflow-hidden">
           <span className="flex items-center gap-1.5 truncate">
-            <Sparkles className="w-3 h-3 text-gold-600 flex-shrink-0" />
-            <span className="truncate">Free Fall &amp; Pico Pre-Finished</span>
+            {isDomestic ? (
+              <>
+                <Sparkles className="w-3 h-3 text-gold-600 flex-shrink-0" />
+                <span className="truncate">Free Fall &amp; Pico Pre-Finished</span>
+              </>
+            ) : (
+              <>
+                <Plane className="w-3 h-3 text-gold-600 flex-shrink-0" />
+                <span className="truncate">DHL Air &bull; Fall &amp; Pico Included</span>
+              </>
+            )}
           </span>
-          <span className="text-[9px] text-stone-500 font-medium flex-shrink-0 ml-1 hidden xs:inline">Ready to Wear</span>
+          <span className="text-[9px] text-stone-500 font-medium flex-shrink-0 ml-1 hidden xs:inline">
+            {isDomestic ? 'Ready to Wear' : 'Export Edition'}
+          </span>
         </div>
+
 
         {/* Hover Action Overlay on Desktop */}
         <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex items-center justify-center gap-2.5 p-4 z-20 pointer-events-none">
@@ -186,7 +199,9 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
               className="flex-1 min-w-0 py-2.5 px-3 bg-gradient-to-r from-emerald-950 via-[#103322] to-emerald-950 hover:from-emerald-900 hover:to-emerald-900 text-gold-300 border border-gold-400/50 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-all hover:border-gold-300 active:scale-98"
             >
               <Zap className="w-3.5 h-3.5 text-gold-400 fill-gold-400 flex-shrink-0" />
-              <span className="truncate text-gold-200 font-semibold tracking-wide">1-Click Buy (UPI)</span>
+              <span className="truncate text-gold-200 font-semibold tracking-wide">
+                {isDomestic ? '1-Click Buy (UPI)' : `Instant Buy (${currency})`}
+              </span>
             </button>
 
             <button
@@ -203,12 +218,21 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
             </button>
           </div>
 
-
           {/* Compact Trust Note */}
           <p className="text-[10px] text-stone-400 text-center mt-2 flex items-center justify-center gap-1">
-            <span>7-Day Doorstep Exchange</span>
-            <span>&bull;</span>
-            <span>Zero Synthetic Blends</span>
+            {isDomestic ? (
+              <>
+                <span>7-Day Doorstep Exchange</span>
+                <span>&bull;</span>
+                <span>Zero Synthetic Blends</span>
+              </>
+            ) : (
+              <>
+                <span>DHL Express Dispatch</span>
+                <span>&bull;</span>
+                <span>Duties Pre-Paid</span>
+              </>
+            )}
           </p>
         </div>
       </div>

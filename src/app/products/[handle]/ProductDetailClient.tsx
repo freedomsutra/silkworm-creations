@@ -5,7 +5,7 @@ import { SareeProduct } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { 
   Star, Sun, Lightbulb, Video, ShoppingBag, Zap, Heart, 
-  Share2, Scissors, Truck, ShieldCheck, Check, Sparkles, MapPin, ChevronDown, RefreshCw 
+  Share2, Scissors, Truck, ShieldCheck, Check, Sparkles, MapPin, ChevronDown, RefreshCw, Plane 
 } from 'lucide-react';
 import Link from 'next/link';
 import DrapeVideoModal from '@/components/DrapeVideoModal';
@@ -19,10 +19,22 @@ export default function ProductDetailClient({
   product: SareeProduct;
   relatedProducts: SareeProduct[];
 }) {
-  const { addItem, triggerInstantCheckout, isWishlisted, toggleWishlist, formatPrice } = useCart();
+  const { 
+    addItem, 
+    triggerInstantCheckout, 
+    isWishlisted, 
+    toggleWishlist, 
+    formatPrice, 
+    isDomestic, 
+    destinationCountry, 
+    shippingCarrier, 
+    shippingTimeline, 
+    currency 
+  } = useCart();
   const [selectedImg, setSelectedImg] = useState(0);
   const [isDaylightMode, setIsDaylightMode] = useState(false);
   const [fallPico, setFallPico] = useState(true);
+  const [readyToWearPleating, setReadyToWearPleating] = useState(false);
   const [blouseStitching, setBlouseStitching] = useState(false);
   const [blouseSize, setBlouseSize] = useState('Standard 38');
   const [drapeOpen, setDrapeOpen] = useState(false);
@@ -50,7 +62,9 @@ export default function ProductDetailClient({
   };
 
   const whatsappInquiry = encodeURIComponent(
-    `Hi SilkWorm Creation! I am interested in ${product.title} (${formatPrice(product.price)}). Can you show me this saree on a quick video call in natural daylight?`
+    isDomestic
+      ? `Hi SilkWorm Creation! I am interested in ${product.title} (${formatPrice(product.price)}). Can you show me this saree on a quick video call in natural daylight from your Zirakpur showroom?`
+      : `Hi SilkWorm Creation! I am contacting you from ${destinationCountry} regarding ${product.title} (${formatPrice(product.price)}). Can you schedule a daylight video drape inspection call before dispatching to ${destinationCountry}?`
   );
 
   return (
@@ -219,13 +233,13 @@ export default function ProductDetailClient({
             </h4>
 
             {/* Fall & Pico */}
-            <label className="flex items-center justify-between p-3.5 rounded-xl border border-stone-200 bg-white hover:border-gold-500/60 cursor-pointer">
+            <label className="flex items-center justify-between p-3.5 rounded-xl border border-stone-200 bg-white hover:border-gold-500/60 cursor-pointer transition-colors">
               <div className="flex items-center gap-2.5">
                 <input
                   type="checkbox"
                   checked={fallPico}
                   onChange={(e) => setFallPico(e.target.checked)}
-                  className="w-4 h-4 text-emerald-900 rounded"
+                  className="w-4 h-4 text-emerald-900 rounded focus:ring-gold-500"
                 />
                 <div>
                   <p className="text-xs font-bold text-stone-900">Complimentary Fall &amp; Pico Done</p>
@@ -236,6 +250,30 @@ export default function ProductDetailClient({
                 FREE
               </span>
             </label>
+
+            {/* International Special: Ready-to-Wear 1-Minute Drape Pleating */}
+            {!isDomestic && (
+              <label className="flex items-center justify-between p-3.5 rounded-xl border border-gold-400/50 bg-gold-50/20 hover:border-gold-500 cursor-pointer transition-colors">
+                <div className="flex items-center gap-2.5">
+                  <input
+                    type="checkbox"
+                    checked={readyToWearPleating}
+                    onChange={(e) => setReadyToWearPleating(e.target.checked)}
+                    className="w-4 h-4 text-emerald-900 rounded focus:ring-gold-500"
+                  />
+                  <div>
+                    <p className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                      <span>Ready-to-Wear 1-Minute Drape</span>
+                      <span className="px-1.5 py-0.5 bg-emerald-950 text-gold-300 text-[8px] font-bold rounded">Pre-Pleated</span>
+                    </p>
+                    <p className="text-[11px] text-stone-600">Custom waistband hooks &amp; pleats. Slip on like a skirt in 60 seconds.</p>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-emerald-950">
+                  +{formatPrice(750)}
+                </span>
+              </label>
+            )}
 
             {/* Blouse Stitching */}
             <div className="p-3.5 rounded-xl border border-stone-200 bg-white space-y-3">
@@ -252,7 +290,7 @@ export default function ProductDetailClient({
                     <p className="text-[11px] text-stone-500">Lined, padded or regular tailoring</p>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-stone-800">+₹1,200</span>
+                <span className="text-xs font-bold text-stone-800">+{formatPrice(1200)}</span>
               </label>
 
               {blouseStitching && (
@@ -275,37 +313,65 @@ export default function ProductDetailClient({
             </div>
           </div>
 
-          {/* Delivery Estimator */}
-          <div className="p-4 rounded-2xl bg-cream-100/70 border border-stone-200 text-xs">
-            <p className="font-bold text-stone-800 mb-2 flex items-center gap-1.5">
-              <Truck className="w-4 h-4 text-emerald-800" />
-              <span>Check Delivery ETA at Your Pincode</span>
-            </p>
-            <form onSubmit={handlePincodeCheck} className="flex gap-2">
-              <input
-                type="text"
-                maxLength={6}
-                placeholder="Enter 6-digit Pincode (e.g. 160017)"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
-                className="flex-1 px-3 py-2 text-xs rounded-xl bg-white border border-stone-200 focus:outline-none focus:border-gold-500 font-mono"
-              />
-              <button type="submit" className="px-4 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-xl font-bold text-xs">
-                Verify
-              </button>
-            </form>
-            {deliveryResult && (
-              <p className="mt-2 text-xs font-semibold text-emerald-900 bg-emerald-50 p-2 rounded-lg border border-emerald-200">
-                {deliveryResult}
+          {/* Delivery Logistics: Domestic vs International */}
+          {isDomestic ? (
+            <div className="p-4 rounded-2xl bg-cream-100/70 border border-stone-200 text-xs">
+              <p className="font-bold text-stone-800 mb-2 flex items-center gap-1.5">
+                <Truck className="w-4 h-4 text-emerald-800" />
+                <span>Check Delivery ETA at Your Pincode</span>
               </p>
-            )}
-          </div>
+              <form onSubmit={handlePincodeCheck} className="flex gap-2">
+                <input
+                  type="text"
+                  maxLength={6}
+                  placeholder="Enter 6-digit Pincode (e.g. 160017)"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
+                  className="flex-1 px-3 py-2 text-xs rounded-xl bg-white border border-stone-200 focus:outline-none focus:border-gold-500 font-mono"
+                />
+                <button type="submit" className="px-4 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-xl font-bold text-xs">
+                  Verify
+                </button>
+              </form>
+              {deliveryResult && (
+                <p className="mt-2 text-xs font-semibold text-emerald-900 bg-emerald-50 p-2 rounded-lg border border-emerald-200">
+                  {deliveryResult}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950 via-[#0a2316] to-emerald-950 text-cream-100 border border-gold-500/30 text-xs space-y-2.5 shadow-md">
+              <div className="flex items-center justify-between">
+                <p className="font-serif font-bold text-gold-300 flex items-center gap-1.5 text-sm">
+                  <Plane className="w-4 h-4 text-gold-400 flex-shrink-0" />
+                  <span>DHL Express to {destinationCountry}</span>
+                </p>
+                <span className="px-2.5 py-0.5 bg-gold-500 text-emerald-950 text-[10px] font-bold rounded-full">
+                  4–6 Business Days
+                </span>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2 pt-1 border-t border-emerald-900/60 text-[11px]">
+                <div>
+                  <p className="text-cream-300/80 text-[10px]">Landed Duty Guarantee</p>
+                  <p className="font-semibold text-white">All Customs Pre-Cleared</p>
+                </div>
+                <div>
+                  <p className="text-cream-300/80 text-[10px]">Export Presentation</p>
+                  <p className="font-semibold text-white">Signature Keepsake Box</p>
+                </div>
+              </div>
+              <p className="text-[11px] text-cream-300/80 leading-relaxed">
+                Tracked end-to-end air courier directly from our atelier in Punjab to your doorstep in {destinationCountry}. Zero unexpected customs duties on delivery.
+              </p>
+            </div>
+          )}
 
           {/* CTA Buttons */}
           <div className="space-y-3 pt-2">
             <div className="grid grid-cols-2 gap-3">
               <button
-                onClick={() => addItem(product, fallPico, blouseStitching, blouseSize)}
+                onClick={() => addItem(product, fallPico, blouseStitching, blouseSize, readyToWearPleating)}
                 className="py-4 px-4 rounded-2xl bg-stone-100 hover:bg-stone-200 text-stone-900 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors"
               >
                 <ShoppingBag className="w-4 h-4" />
@@ -317,7 +383,7 @@ export default function ProductDetailClient({
                 className="py-4 px-4 rounded-2xl bg-emerald-900 hover:bg-emerald-950 text-gold-300 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/20 transition-all transform hover:-translate-y-0.5"
               >
                 <Zap className="w-4 h-4 text-gold-400 fill-current" />
-                <span>1-Click Buy (UPI)</span>
+                <span>{isDomestic ? '1-Click Buy (UPI)' : `Instant Buy (${currency})`}</span>
               </button>
             </div>
 
@@ -328,28 +394,50 @@ export default function ProductDetailClient({
               className="w-full py-3.5 px-4 rounded-2xl border border-emerald-900/30 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
             >
               <Video className="w-4 h-4 text-green-600 animate-pulse" />
-              <span>Book 1-on-1 Video Call on WhatsApp to Inspect Saree</span>
-              </a>
+              <span>{isDomestic ? 'Book 1-on-1 Video Call on WhatsApp to Inspect Saree' : `Schedule 1-on-1 Daylight Video Call (${destinationCountry})`}</span>
+            </a>
 
-              {/* 7-Day Exchange Trust Guarantee */}
-              <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-cream-100/90 border border-stone-200 text-center text-[10px] text-stone-700">
-                <div className="flex flex-col items-center gap-1">
-                  <RefreshCw className="w-3.5 h-3.5 text-emerald-800" />
-                  <span className="font-bold text-stone-900">7-Day Exchange</span>
-                  <span className="text-[9px] text-stone-500">Doorstep pickup</span>
-                </div>
-                <div className="flex flex-col items-center gap-1 border-x border-stone-200">
-                  <Sparkles className="w-3.5 h-3.5 text-gold-600" />
-                  <span className="font-bold text-stone-900">Free Fall &amp; Pico</span>
-                  <span className="text-[9px] text-stone-500">Pre-finished drape</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-800" />
-                  <span className="font-bold text-stone-900">Transit Insured</span>
-                  <span className="text-[9px] text-stone-500">100% Protection</span>
-                </div>
-              </div>
+            {/* Trust Guarantees */}
+            <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-cream-100/90 border border-stone-200 text-center text-[10px] text-stone-700">
+              {isDomestic ? (
+                <>
+                  <div className="flex flex-col items-center gap-1">
+                    <RefreshCw className="w-3.5 h-3.5 text-emerald-800" />
+                    <span className="font-bold text-stone-900">7-Day Exchange</span>
+                    <span className="text-[9px] text-stone-500">Doorstep pickup</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 border-x border-stone-200">
+                    <Sparkles className="w-3.5 h-3.5 text-gold-600" />
+                    <span className="font-bold text-stone-900">Free Fall &amp; Pico</span>
+                    <span className="text-[9px] text-stone-500">Pre-finished drape</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-800" />
+                    <span className="font-bold text-stone-900">Transit Insured</span>
+                    <span className="text-[9px] text-stone-500">100% Protection</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col items-center gap-1">
+                    <Plane className="w-3.5 h-3.5 text-emerald-800" />
+                    <span className="font-bold text-stone-900">DHL Air Express</span>
+                    <span className="text-[9px] text-stone-500">4–6 Days Tracked</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 border-x border-stone-200">
+                    <ShieldCheck className="w-3.5 h-3.5 text-gold-600" />
+                    <span className="font-bold text-stone-900">Duties Pre-Paid</span>
+                    <span className="text-[9px] text-stone-500">Zero Extra Fees</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-800" />
+                    <span className="font-bold text-stone-900">Artisan Certified</span>
+                    <span className="text-[9px] text-stone-500">Silk Mark Handloom</span>
+                  </div>
+                </>
+              )}
             </div>
+          </div>
 
         </div>
 

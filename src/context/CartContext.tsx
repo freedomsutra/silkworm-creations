@@ -16,7 +16,13 @@ interface CartContextType {
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addItem: (product: SareeProduct, fallPico?: boolean, blouseStitching?: boolean, blouseSize?: string) => void;
+  addItem: (
+    product: SareeProduct, 
+    fallPico?: boolean, 
+    blouseStitching?: boolean, 
+    blouseSize?: string,
+    readyToWearPleating?: boolean
+  ) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, delta: number) => void;
   totalItems: number;
@@ -35,16 +41,22 @@ interface CartContextType {
   openWishlist: () => void;
   closeWishlist: () => void;
 
-  // Currency
+  // Currency & Personalization
   currency: Currency;
   setCurrency: (c: Currency) => void;
   formatPrice: (inrAmount: number) => string;
+  isDomestic: boolean;
+  destinationCountry: string;
+  shippingCarrier: string;
+  shippingTimeline: string;
+  shippingPromise: string;
 
   // Order Tracking
   trackModalOpen: boolean;
   openTrackModal: () => void;
   closeTrackModal: () => void;
 }
+
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -68,7 +80,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (savedWish) setWishlist(JSON.parse(savedWish));
 
       const savedCur = localStorage.getItem('silkworm_currency') as Currency;
-      if (savedCur && CURRENCIES[savedCur]) setCurrencyState(savedCur);
+      if (savedCur && CURRENCIES[savedCur]) {
+        setCurrencyState(savedCur);
+      } else {
+        // Auto-detect based on user's timezone locale
+        try {
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+          if (tz.includes('Calcutta') || tz.includes('Kolkata') || tz.includes('India')) {
+            setCurrencyState('INR');
+          } else if (tz.includes('London') || tz.includes('Europe/Belfast') || tz.includes('Dublin')) {
+            setCurrencyState('GBP');
+          } else if (tz.includes('Toronto') || tz.includes('Vancouver') || tz.includes('Montreal') || tz.includes('Canada') || tz.includes('Edmonton') || tz.includes('Winnipeg') || tz.includes('Halifax')) {
+            setCurrencyState('CAD');
+          } else if (tz.includes('Dubai') || tz.includes('Muscat') || tz.includes('Riyadh') || tz.includes('Qatar') || tz.includes('Kuwait')) {
+            setCurrencyState('AED');
+          } else if (tz.includes('America') || tz.includes('New_York') || tz.includes('Los_Angeles') || tz.includes('Chicago')) {
+            setCurrencyState('USD');
+          }
+        } catch (e) {}
+      }
     } catch (e) {}
   }, []);
 
@@ -88,6 +118,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCurrencyState(c);
     try { localStorage.setItem('silkworm_currency', c); } catch (e) {}
   };
+
+  const isDomestic = currency === 'INR';
+
+  const destinationCountry = {
+    INR: 'India',
+    USD: 'United States',
+    CAD: 'Canada',
+    GBP: 'United Kingdom',
+    AED: 'United Arab Emirates'
+  }[currency];
+
+  const shippingCarrier = isDomestic 
+    ? 'BlueDart Express / Delhivery' 
+    : 'DHL Express Worldwide Air';
+
+  const shippingTimeline = isDomestic 
+    ? '2–3 Business Days (Same-day dispatch in Tricity)' 
+    : '4–6 Business Days Tracked Doorstep Delivery';
+
+  const shippingPromise = isDomestic 
+    ? 'Free Insured Express Across India • Fall & Pico Pre-Done' 
+    : `Express to ${destinationCountry} • All Import Duties Pre-Cleared`;
 
   const formatPrice = (inrAmount: number): string => {
     const cur = CURRENCIES[currency];
@@ -115,20 +167,31 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const openTrackModal = () => setTrackModalOpen(true);
   const closeTrackModal = () => setTrackModalOpen(false);
 
-  const addItem = (product: SareeProduct, fallPico = true, blouseStitching = false, blouseSize = 'Standard 38') => {
+  const addItem = (
+    product: SareeProduct, 
+    fallPico = true, 
+    blouseStitching = false, 
+    blouseSize = 'Standard 38',
+    readyToWearPleating = false
+  ) => {
     setItems(prev => {
-      const existing = prev.find(item => item.product.id === product.id);
+      const existing = prev.find(item => 
+        item.product.id === product.id && 
+        item.blouseStitching === blouseStitching &&
+        item.readyToWearPleating === readyToWearPleating
+      );
       if (existing) {
         return prev.map(item =>
-          item.product.id === product.id
+          item === existing
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prev, { product, quantity: 1, fallPico, blouseStitching, blouseSize }];
+      return [...prev, { product, quantity: 1, fallPico, blouseStitching, blouseSize, readyToWearPleating }];
     });
     setIsOpen(true);
   };
+
 
   const removeItem = (productId: number) => {
     setItems(prev => prev.filter(item => item.product.id !== productId));
@@ -164,6 +227,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const subtotal = items.reduce((acc, cur) => {
     let itemPrice = cur.product.price;
     if (cur.blouseStitching) itemPrice += 1200;
+    if (cur.readyToWearPleating) itemPrice += 750;
     return acc + (itemPrice * cur.quantity);
   }, 0);
 
@@ -192,6 +256,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       currency,
       setCurrency,
       formatPrice,
+      isDomestic,
+      destinationCountry,
+      shippingCarrier,
+      shippingTimeline,
+      shippingPromise,
       trackModalOpen,
       openTrackModal,
       closeTrackModal,
@@ -199,6 +268,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       {children}
     </CartContext.Provider>
   );
+
 }
 
 export function useCart() {

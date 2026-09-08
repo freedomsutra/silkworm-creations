@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { 
   X, Trash2, Plus, Minus, ShoppingBag, Zap, 
-  Sparkles, Truck, ArrowRight, Scissors 
+  Sparkles, Truck, ArrowRight, Scissors, Plane 
 } from 'lucide-react';
 
 export default function CartDrawer() {
@@ -16,7 +16,12 @@ export default function CartDrawer() {
     removeItem, 
     subtotal, 
     openCheckout, 
-    formatPrice 
+    formatPrice,
+    isDomestic,
+    destinationCountry,
+    shippingCarrier,
+    shippingTimeline,
+    currency
   } = useCart();
 
   const [promoCode, setPromoCode] = useState('');
@@ -55,10 +60,19 @@ export default function CartDrawer() {
         {/* Free Shipping & Fall/Pico Progress Meter */}
         <div className="bg-emerald-900 text-cream-100 p-3 text-xs font-semibold flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Truck className="w-4 h-4 text-gold-400" />
-            <span>Unlocked: <strong>Free Express Shipping &amp; Fall/Pico</strong></span>
+            {isDomestic ? (
+              <>
+                <Truck className="w-4 h-4 text-gold-400 flex-shrink-0" />
+                <span>Unlocked: <strong>Free Express Shipping &amp; Fall/Pico</strong></span>
+              </>
+            ) : (
+              <>
+                <Plane className="w-4 h-4 text-gold-400 flex-shrink-0" />
+                <span>Unlocked: <strong>DHL Express to {destinationCountry} &amp; Duties Covered</strong></span>
+              </>
+            )}
           </div>
-          <Sparkles className="w-4 h-4 text-gold-400" />
+          <Sparkles className="w-4 h-4 text-gold-400 flex-shrink-0" />
         </div>
 
         {/* Items List */}
@@ -110,6 +124,11 @@ export default function CartDrawer() {
                           + Free Fall &amp; Pico
                         </span>
                       )}
+                      {item.readyToWearPleating && (
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-gold-50 text-emerald-950 border border-gold-300">
+                          + 1-Min Drape Pleats (+{formatPrice(750)})
+                        </span>
+                      )}
                       {item.blouseStitching && (
                         <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
                           + Blouse Stitching ({item.blouseSize})
@@ -139,7 +158,7 @@ export default function CartDrawer() {
                     </div>
 
                     <span className="font-bold text-xs text-emerald-950 font-serif">
-                      {formatPrice(item.product.price * item.quantity)}
+                      {formatPrice((item.product.price + (item.blouseStitching ? 1200 : 0) + (item.readyToWearPleating ? 750 : 0)) * item.quantity)}
                     </span>
                   </div>
                 </div>
@@ -182,6 +201,16 @@ export default function CartDrawer() {
                 <span>Fall &amp; Pico Tailoring:</span>
                 <span>FREE</span>
               </div>
+              <div className="flex justify-between text-emerald-800 font-medium">
+                <span>{isDomestic ? 'Insured Domestic Express:' : `DHL Express Air to ${destinationCountry}:`}</span>
+                <span>FREE</span>
+              </div>
+              {!isDomestic && (
+                <div className="flex justify-between text-emerald-800 font-medium">
+                  <span>Destination Customs &amp; Taxes:</span>
+                  <span className="font-bold">PRE-PAID ($0)</span>
+                </div>
+              )}
               <div className="pt-2 border-t border-stone-200 flex justify-between font-bold text-stone-900 text-sm">
                 <span>Total:</span>
                 <span className="text-emerald-950 font-serif text-base">
@@ -195,7 +224,7 @@ export default function CartDrawer() {
               className="w-full py-4 bg-emerald-900 hover:bg-emerald-950 text-gold-300 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/20 transition-all"
             >
               <Zap className="w-4 h-4 text-gold-400 fill-current" />
-              <span>Proceed to 1-Click Checkout &bull; {formatPrice(finalTotal)}</span>
+              <span>{isDomestic ? 'Proceed to 1-Click Checkout' : `Express Checkout (${currency})`} &bull; {formatPrice(finalTotal)}</span>
             </button>
           </div>
         )}

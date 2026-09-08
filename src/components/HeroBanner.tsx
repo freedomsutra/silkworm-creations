@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { ArrowRight, Video, Sparkles, ShieldCheck, MapPin, Compass } from 'lucide-react';
+import { ArrowRight, Video, Sparkles, ShieldCheck, MapPin, Compass, Plane } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 interface HeroBannerProps {
   onExploreClick: () => void;
@@ -9,6 +10,8 @@ interface HeroBannerProps {
 }
 
 export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBannerProps) {
+  const { isDomestic, destinationCountry, currency } = useCart();
+
   return (
     <section className="relative overflow-hidden bg-emerald-950 text-cream-100">
       {/* Background Subtle Gradient & Accents */}
@@ -18,15 +21,23 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-700/20 rounded-full blur-3xl" />
       </div>
 
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Column: Copy & Value Proposition */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/15 border border-gold-400/30 text-gold-300 text-xs font-semibold tracking-wide">
-              <Sparkles className="w-3.5 h-3.5 text-gold-400 animate-spin" style={{ animationDuration: '4s' }} />
-              <span>HANDLOOM HERITAGE &bull; CHANDIGARH TRICITY</span>
+              {isDomestic ? (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 text-gold-400 animate-spin" style={{ animationDuration: '4s' }} />
+                  <span>HANDLOOM HERITAGE &bull; CHANDIGARH TRICITY</span>
+                </>
+              ) : (
+                <>
+                  <Plane className="w-3.5 h-3.5 text-gold-400 animate-pulse" />
+                  <span>GLOBAL ATELIER EXPORT &bull; EXPRESS TO {destinationCountry.toUpperCase()}</span>
+                </>
+              )}
             </div>
 
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-cream-50 leading-[1.15]">
@@ -37,7 +48,11 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
             </h1>
 
             <p className="text-sm sm:text-base text-cream-200/90 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Discover master-woven Pure Linen, Banarasi Tissue, and Handloom Cotton Sarees. Experience every weave in natural daylight through 1-on-1 video calls or visit our flagship boutique in Reliance Square, Zirakpur.
+              {isDomestic ? (
+                "Discover master-woven Pure Linen, Banarasi Tissue, and Handloom Cotton Sarees. Experience every weave in natural daylight through 1-on-1 video calls or visit our flagship boutique in Reliance Square, Zirakpur."
+              ) : (
+                `Authentic Indian handloom sarees delivered directly to your doorstep in ${destinationCountry}. Every drape is inspected in daylight, finished with complimentary Fall & Pico, with guaranteed pre-cleared customs duties.`
+              )}
             </p>
 
             {/* CTA Buttons */}
@@ -46,7 +61,7 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
                 onClick={onExploreClick}
                 className="w-full sm:w-auto px-8 py-4 bg-gold-500 hover:bg-gold-400 text-emerald-950 font-bold rounded-full shadow-lg shadow-gold-500/20 flex items-center justify-center gap-2 text-sm uppercase tracking-wider transition-all transform hover:-translate-y-0.5 active:translate-y-0"
               >
-                <span>Shop Handloom Edit</span>
+                <span>{isDomestic ? 'Shop Handloom Edit' : `Explore Collection (${currency})`}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -55,24 +70,43 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
                 className="w-full sm:w-auto px-7 py-4 bg-emerald-900/80 hover:bg-emerald-800 text-cream-100 font-semibold rounded-full border border-gold-400/40 flex items-center justify-center gap-2.5 text-sm transition-all"
               >
                 <Video className="w-4 h-4 text-gold-400 animate-pulse" />
-                <span>Book WhatsApp Drape Call</span>
+                <span>{isDomestic ? 'Book WhatsApp Drape Call' : 'Book Daylight Video Salon'}</span>
               </button>
             </div>
 
             {/* Trust Points */}
             <div className="pt-6 border-t border-emerald-800/80 grid grid-cols-3 gap-3 text-center lg:text-left">
-              <div>
-                <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">100%</p>
-                <p className="text-[11px] sm:text-xs text-cream-300">Authentic Handloom</p>
-              </div>
-              <div>
-                <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">FREE</p>
-                <p className="text-[11px] sm:text-xs text-cream-300">Fall &amp; Pico Detailing</p>
-              </div>
-              <div>
-                <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">4.9 ★</p>
-                <p className="text-[11px] sm:text-xs text-cream-300">Client Satisfaction</p>
-              </div>
+              {isDomestic ? (
+                <>
+                  <div>
+                    <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">100%</p>
+                    <p className="text-[11px] sm:text-xs text-cream-300">Authentic Handloom</p>
+                  </div>
+                  <div>
+                    <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">FREE</p>
+                    <p className="text-[11px] sm:text-xs text-cream-300">Fall &amp; Pico Detailing</p>
+                  </div>
+                  <div>
+                    <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">2–3 DAYS</p>
+                    <p className="text-[11px] sm:text-xs text-cream-300">Fast Pan-India Delivery</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">4–6 DAYS</p>
+                    <p className="text-[11px] sm:text-xs text-cream-300">DHL Worldwide Air</p>
+                  </div>
+                  <div>
+                    <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">DUTY-FREE</p>
+                    <p className="text-[11px] sm:text-xs text-cream-300">Import Taxes Pre-Paid</p>
+                  </div>
+                  <div>
+                    <p className="font-serif text-xl sm:text-2xl font-bold text-gold-300">1-MIN DRAPE</p>
+                    <p className="text-[11px] sm:text-xs text-cream-300">Pre-Stitched Option</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -95,9 +129,10 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
                 </div>
 
                 <div className="bg-emerald-950/90 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-gold-400/40 text-[9px] sm:text-[10px] font-bold text-cream-100 tracking-wider uppercase flex-shrink-0">
-                  Tricity Flagship
+                  {isDomestic ? 'Tricity Flagship' : 'Worldwide Courier'}
                 </div>
               </div>
+
 
               {/* Floating Editorial Card (Mobile Overflow Safe) */}
               <div className="absolute bottom-3 inset-x-3 sm:bottom-5 sm:inset-x-5 p-3 sm:p-4 rounded-2xl bg-emerald-950/95 backdrop-blur-md border border-gold-400/30 text-cream-100 shadow-xl overflow-hidden z-10">

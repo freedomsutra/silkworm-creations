@@ -27,7 +27,9 @@ export interface CartItem {
   fallPico: boolean;
   blouseStitching: boolean;
   blouseSize?: string;
+  readyToWearPleating?: boolean;
 }
+
 
 export interface Review {
   id: string;

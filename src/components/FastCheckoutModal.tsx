@@ -16,17 +16,23 @@ export default function FastCheckoutModal() {
     selectedProductForCheckout, 
     items, 
     subtotal, 
-    formatPrice 
+    formatPrice,
+    isDomestic,
+    destinationCountry,
+    shippingCarrier,
+    shippingTimeline,
+    currency
   } = useCart();
 
   const [step, setStep] = useState<'phone' | 'address' | 'payment' | 'success'>('phone');
-  const [phoneNumber, setPhoneNumber] = useState('9876543210');
+  const [phoneNumber, setPhoneNumber] = useState(isDomestic ? '9876543210' : '4155552671');
   const [otp, setOtp] = useState(['4', '2', '8', '9']);
-  const [fullName, setFullName] = useState('Ananya Sharma');
-  const [address, setAddress] = useState('House No. 452, Sector 8-C');
-  const [city, setCity] = useState('Chandigarh');
-  const [pincode, setPincode] = useState('160018');
-  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'cod'>('upi');
+  const [fullName, setFullName] = useState(isDomestic ? 'Ananya Sharma' : 'Priya Patel');
+  const [address, setAddress] = useState(isDomestic ? 'House No. 452, Sector 8-C' : '742 Evergreen Terrace');
+  const [city, setCity] = useState(isDomestic ? 'Chandigarh' : 'San Francisco');
+  const [stateRegion, setStateRegion] = useState(isDomestic ? 'Punjab / Chandigarh' : 'California');
+  const [pincode, setPincode] = useState(isDomestic ? '160018' : '94102');
+  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'cod' | 'paypal'>(isDomestic ? 'upi' : 'card');
   const [orderId, setOrderId] = useState('');
 
   useEffect(() => {
@@ -121,22 +127,35 @@ export default function FastCheckoutModal() {
           {step === 'phone' && (
             <form onSubmit={handlePhoneSubmit} className="space-y-4">
               <div className="text-center mb-4">
-                <h3 className="font-serif text-lg font-bold text-emerald-950">Enter Mobile Number</h3>
-                <p className="text-xs text-stone-500">We'll send order updates and dispatch tracking via WhatsApp &amp; SMS.</p>
+                <h3 className="font-serif text-lg font-bold text-emerald-950">
+                  {isDomestic ? 'Enter Mobile Number' : `Contact & Tracking Info (${destinationCountry})`}
+                </h3>
+                <p className="text-xs text-stone-500">
+                  {isDomestic 
+                    ? "We'll send order updates and dispatch tracking via WhatsApp & SMS."
+                    : "We'll send DHL Express air tracking updates and airway bill via WhatsApp & SMS."
+                  }
+                </p>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-stone-700 block mb-1">Mobile Number</label>
+                <label className="text-xs font-bold text-stone-700 block mb-1">
+                  {isDomestic ? 'Mobile Number' : 'WhatsApp / Mobile Number'}
+                </label>
                 <div className="flex gap-2">
                   <span className="px-3 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-xs font-bold text-stone-700">
-                    🇮🇳 +91
+                    {currency === 'INR' && '🇮🇳 +91'}
+                    {currency === 'USD' && '🇺🇸 +1'}
+                    {currency === 'CAD' && '🇨🇦 +1'}
+                    {currency === 'GBP' && '🇬🇧 +44'}
+                    {currency === 'AED' && '🇦🇪 +971'}
                   </span>
                   <input
                     type="tel"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     className="flex-1 px-3 py-2.5 text-sm rounded-xl border border-stone-200 bg-stone-50 focus:outline-none focus:border-gold-500 font-mono font-bold"
-                    placeholder="10-digit mobile"
+                    placeholder={isDomestic ? '10-digit mobile' : 'Phone / WhatsApp'}
                     required
                   />
                 </div>
@@ -145,7 +164,7 @@ export default function FastCheckoutModal() {
               <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 flex items-center justify-between">
                 <span className="flex items-center gap-1.5 font-medium">
                   <Sparkles className="w-4 h-4 text-gold-600" />
-                  <span>Verified Auto-OTP Detected</span>
+                  <span>{isDomestic ? 'Verified Auto-OTP Detected' : 'Verified Secure Atelier Session'}</span>
                 </span>
                 <span className="font-mono font-bold text-emerald-800">● ● ● ●</span>
               </div>
@@ -164,8 +183,10 @@ export default function FastCheckoutModal() {
           {step === 'address' && (
             <form onSubmit={handleAddressSubmit} className="space-y-3">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-serif text-base font-bold text-emerald-950">Delivery Address</h3>
-                <button type="button" onClick={() => setStep('phone')} className="text-xs text-gold-700 underline font-semibold">Edit Phone</button>
+                <h3 className="font-serif text-base font-bold text-emerald-950">
+                  {isDomestic ? 'Delivery Address' : `Destination Address (${destinationCountry})`}
+                </h3>
+                <button type="button" onClick={() => setStep('phone')} className="text-xs text-gold-700 underline font-semibold">Edit Contact</button>
               </div>
 
               <div>
@@ -180,7 +201,9 @@ export default function FastCheckoutModal() {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-stone-600 block mb-0.5">House / Apartment / Street Address</label>
+                <label className="text-[11px] font-bold text-stone-600 block mb-0.5">
+                  {isDomestic ? 'House / Apartment / Street Address' : 'Street Address / Suite / Apartment'}
+                </label>
                 <input
                   type="text"
                   value={address}
@@ -202,7 +225,24 @@ export default function FastCheckoutModal() {
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-bold text-stone-600 block mb-0.5">PIN Code</label>
+                  <label className="text-[11px] font-bold text-stone-600 block mb-0.5">
+                    {isDomestic ? 'State / UT' : 'State / Province / Region'}
+                  </label>
+                  <input
+                    type="text"
+                    value={stateRegion}
+                    onChange={(e) => setStateRegion(e.target.value)}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 bg-stone-50 focus:outline-none focus:border-gold-500"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[11px] font-bold text-stone-600 block mb-0.5">
+                    {isDomestic ? 'PIN Code' : 'Postal / ZIP Code'}
+                  </label>
                   <input
                     type="text"
                     value={pincode}
@@ -211,11 +251,21 @@ export default function FastCheckoutModal() {
                     required
                   />
                 </div>
+                <div>
+                  <label className="text-[11px] font-bold text-stone-600 block mb-0.5">Country</label>
+                  <div className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 bg-stone-100 font-bold text-stone-800 truncate">
+                    {destinationCountry}
+                  </div>
+                </div>
               </div>
 
               <div className="p-2.5 bg-cream-100 rounded-xl text-[11px] text-stone-700 flex items-center gap-2">
                 <Truck className="w-4 h-4 text-emerald-800 flex-shrink-0" />
-                <span>Express Dispatch from SCO 2, Reliance Square Showroom</span>
+                <span>
+                  {isDomestic 
+                    ? 'Express Dispatch from SCO 2, Reliance Square Showroom (BlueDart 2-3 Days)' 
+                    : `DHL Express Worldwide Air to ${destinationCountry} (4–6 Days • Customs Pre-Paid)`}
+                </span>
               </div>
 
               <button
@@ -234,68 +284,120 @@ export default function FastCheckoutModal() {
               <h3 className="font-serif text-base font-bold text-emerald-950">Select Payment Method</h3>
 
               <div className="space-y-2">
-                {/* UPI Option */}
-                <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
-                  paymentMethod === 'upi' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
-                }`}>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="radio"
-                      name="payment"
-                      checked={paymentMethod === 'upi'}
-                      onChange={() => setPaymentMethod('upi')}
-                      className="text-emerald-900"
-                    />
-                    <div>
-                      <p className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
-                        <span>Instant UPI (Google Pay, PhonePe, Paytm)</span>
-                        <span className="px-1.5 py-0.5 bg-green-100 text-green-800 text-[9px] font-bold rounded">Fastest</span>
-                      </p>
-                      <p className="text-[11px] text-stone-500">1-tap approval in your favorite UPI app</p>
-                    </div>
-                  </div>
-                  <Zap className="w-4 h-4 text-gold-600 fill-current" />
-                </label>
+                {isDomestic ? (
+                  <>
+                    {/* UPI Option */}
+                    <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      paymentMethod === 'upi' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
+                    }`}>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={paymentMethod === 'upi'}
+                          onChange={() => setPaymentMethod('upi')}
+                          className="text-emerald-900"
+                        />
+                        <div>
+                          <p className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                            <span>Instant UPI (Google Pay, PhonePe, Paytm)</span>
+                            <span className="px-1.5 py-0.5 bg-green-100 text-green-800 text-[9px] font-bold rounded">Fastest</span>
+                          </p>
+                          <p className="text-[11px] text-stone-500">1-tap approval in your favorite UPI app</p>
+                        </div>
+                      </div>
+                      <Zap className="w-4 h-4 text-gold-600 fill-current" />
+                    </label>
 
-                {/* Card Option */}
-                <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
-                  paymentMethod === 'card' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
-                }`}>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="radio"
-                      name="payment"
-                      checked={paymentMethod === 'card'}
-                      onChange={() => setPaymentMethod('card')}
-                      className="text-emerald-900"
-                    />
-                    <div>
-                      <p className="text-xs font-bold text-stone-900">Credit / Debit Card</p>
-                      <p className="text-[11px] text-stone-500">Visa, MasterCard, RuPay, Amex</p>
-                    </div>
-                  </div>
-                  <CreditCard className="w-4 h-4 text-stone-500" />
-                </label>
+                    {/* Card Option */}
+                    <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      paymentMethod === 'card' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
+                    }`}>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={paymentMethod === 'card'}
+                          onChange={() => setPaymentMethod('card')}
+                          className="text-emerald-900"
+                        />
+                        <div>
+                          <p className="text-xs font-bold text-stone-900">Credit / Debit Card</p>
+                          <p className="text-[11px] text-stone-500">Visa, MasterCard, RuPay, Amex</p>
+                        </div>
+                      </div>
+                      <CreditCard className="w-4 h-4 text-stone-500" />
+                    </label>
 
-                {/* COD Option */}
-                <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
-                  paymentMethod === 'cod' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
-                }`}>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="radio"
-                      name="payment"
-                      checked={paymentMethod === 'cod'}
-                      onChange={() => setPaymentMethod('cod')}
-                      className="text-emerald-900"
-                    />
-                    <div>
-                      <p className="text-xs font-bold text-stone-900">Cash on Delivery / Pay on Delivery</p>
-                      <p className="text-[11px] text-stone-500">Inspect parcel and pay upon arrival</p>
-                    </div>
-                  </div>
-                  <Truck className="w-4 h-4 text-stone-500" />
-                </label>
+                    {/* COD Option */}
+                    <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      paymentMethod === 'cod' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
+                    }`}>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={paymentMethod === 'cod'}
+                          onChange={() => setPaymentMethod('cod')}
+                          className="text-emerald-900"
+                        />
+                        <div>
+                          <p className="text-xs font-bold text-stone-900">Cash on Delivery / Pay on Delivery</p>
+                          <p className="text-[11px] text-stone-500">Inspect parcel and pay upon arrival</p>
+                        </div>
+                      </div>
+                      <Truck className="w-4 h-4 text-stone-500" />
+                    </label>
+                  </>
+                ) : (
+                  <>
+                    {/* International Card Option */}
+                    <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      paymentMethod === 'card' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
+                    }`}>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={paymentMethod === 'card'}
+                          onChange={() => setPaymentMethod('card')}
+                          className="text-emerald-900"
+                        />
+                        <div>
+                          <p className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                            <span>International Credit / Debit Card</span>
+                            <span className="px-1.5 py-0.5 bg-gold-500/20 text-emerald-950 text-[9px] font-bold rounded">Instant</span>
+                          </p>
+                          <p className="text-[11px] text-stone-500">Visa, MasterCard, American Express, Discover</p>
+                        </div>
+                      </div>
+                      <CreditCard className="w-4 h-4 text-stone-600" />
+                    </label>
+
+                    {/* Apple Pay / PayPal Option */}
+                    <label className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      paymentMethod === 'paypal' ? 'border-gold-500 bg-amber-50/50 ring-1 ring-gold-500' : 'border-stone-200 bg-white'
+                    }`}>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={paymentMethod === 'paypal'}
+                          onChange={() => setPaymentMethod('paypal')}
+                          className="text-emerald-900"
+                        />
+                        <div>
+                          <p className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                            <span>Apple Pay / PayPal / Google Pay</span>
+                            <span className="px-1.5 py-0.5 bg-green-100 text-green-800 text-[9px] font-bold rounded">1-Tap</span>
+                          </p>
+                          <p className="text-[11px] text-stone-500">Seamless biometric instant checkout</p>
+                        </div>
+                      </div>
+                      <Zap className="w-4 h-4 text-gold-600 fill-current" />
+                    </label>
+                  </>
+                )}
               </div>
 
               {/* Order Summary Box */}
@@ -313,9 +415,15 @@ export default function FastCheckoutModal() {
                   <span>FREE</span>
                 </div>
                 <div className="flex justify-between text-emerald-800 font-medium">
-                  <span>Express Insured Shipping:</span>
+                  <span>{isDomestic ? 'Express Insured Courier:' : `DHL Express Air to ${destinationCountry}:`}</span>
                   <span>FREE</span>
                 </div>
+                {!isDomestic && (
+                  <div className="flex justify-between text-emerald-800 font-medium">
+                    <span>Destination Customs &amp; Import Taxes:</span>
+                    <span className="font-bold">PRE-PAID ($0)</span>
+                  </div>
+                )}
                 <div className="pt-2 border-t border-stone-200 flex justify-between font-bold text-stone-900 text-sm">
                   <span>Total Payable:</span>
                   <span className="text-emerald-950 font-serif text-base">{formatPrice(finalPayable)}</span>
@@ -340,27 +448,35 @@ export default function FastCheckoutModal() {
                 <CheckCircle2 className="w-10 h-10" />
               </div>
               <h3 className="font-serif text-2xl font-bold text-emerald-950">
-                Order Placed Successfully!
+                {isDomestic ? 'Order Placed Successfully!' : 'Global Export Order Confirmed!'}
               </h3>
               <p className="text-xs text-stone-600 max-w-sm mx-auto">
-                Thank you, <strong>{fullName}</strong>. Your saree order <strong>#{orderId}</strong> has been received by our Chandigarh boutique.
+                {isDomestic ? (
+                  <>Thank you, <strong>{fullName}</strong>. Your saree order <strong>#{orderId}</strong> has been received by our Chandigarh boutique.</>
+                ) : (
+                  <>Thank you, <strong>{fullName}</strong>. Your authentic handloom order <strong>#{orderId}</strong> is being finished for export to <strong>{destinationCountry}</strong>.</>
+                )}
               </p>
 
               <div className="p-4 rounded-2xl bg-cream-50 border border-stone-200 text-left text-xs space-y-1.5">
-                <p><strong>Shipping Address:</strong> {address}, {city} - {pincode}</p>
-                <p><strong>Mobile:</strong> +91 {phoneNumber}</p>
-                <p><strong>Status:</strong> Preparing for Fall &amp; Pico Finishing</p>
-                <p className="text-emerald-800 font-semibold pt-1">Estimated Delivery: 2 - 4 Business Days</p>
+                <p><strong>Shipping Address:</strong> {address}, {city}, {stateRegion} - {pincode}, {destinationCountry}</p>
+                <p><strong>Contact:</strong> {phoneNumber}</p>
+                <p><strong>Status:</strong> {isDomestic ? 'Preparing for Fall & Pico Finishing' : 'Fall & Pico Handcrafting & Keepsake Box Packing'}</p>
+                <p className="text-emerald-800 font-semibold pt-1">
+                  Estimated Delivery: {shippingTimeline}
+                </p>
               </div>
 
               <div className="pt-2 flex flex-col gap-2">
                 <a
-                  href={`https://wa.me/917876719360?text=Hi%20SilkWorm%20Creation,%20I%20just%20placed%20order%20%23${orderId}.%20Please%20share%20dispatch%20updates.`}
+                  href={`https://wa.me/917876719360?text=${encodeURIComponent(
+                    `Hi SilkWorm Creation, I just placed order #${orderId} for delivery to ${destinationCountry}. Please share dispatch and tracking updates.`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2"
                 >
-                  <span>Get Live Updates on WhatsApp</span>
+                  <span>{isDomestic ? 'Get Live Updates on WhatsApp' : 'Atelier Concierge on WhatsApp'}</span>
                 </a>
 
                 <button

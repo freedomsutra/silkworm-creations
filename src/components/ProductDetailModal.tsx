@@ -5,7 +5,8 @@ import { SareeProduct } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { 
   X, Star, Sun, Lightbulb, Video, ShoppingBag, Zap, 
-  ShieldCheck, Scissors, Truck, Sparkles, RefreshCw, Check
+  ShieldCheck, Scissors, Truck, Sparkles, RefreshCw, Check,
+  Plane, Gift, Globe
 } from 'lucide-react';
 
 interface ProductDetailModalProps {
@@ -15,10 +16,20 @@ interface ProductDetailModalProps {
 }
 
 export default function ProductDetailModal({ product, onClose, onWatchDrape }: ProductDetailModalProps) {
-  const { addItem, triggerInstantCheckout, formatPrice } = useCart();
+  const { 
+    addItem, 
+    triggerInstantCheckout, 
+    formatPrice, 
+    isDomestic, 
+    destinationCountry, 
+    shippingCarrier, 
+    shippingTimeline, 
+    currency 
+  } = useCart();
   const [selectedImg, setSelectedImg] = useState(0);
   const [isDaylightMode, setIsDaylightMode] = useState(false);
   const [fallPico, setFallPico] = useState(true);
+  const [readyToWearPleating, setReadyToWearPleating] = useState(false);
   const [blouseStitching, setBlouseStitching] = useState(false);
   const [blouseSize, setBlouseSize] = useState('Standard 38');
   const [added, setAdded] = useState(false);
@@ -55,7 +66,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
   };
 
   const handleAddToCart = () => {
-    addItem(product, fallPico, blouseStitching, blouseSize);
+    addItem(product, fallPico, blouseStitching, blouseSize, readyToWearPleating);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -66,7 +77,9 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Hi SilkWorm Creation, I am interested in "${product.title}" (${formatPrice(product.price)}). Can you show me this saree on a quick 1-on-1 video call from your showroom in natural daylight?`
+    isDomestic
+      ? `Hi SilkWorm Creation, I am interested in "${product.title}" (${formatPrice(product.price)}). Can you show me this saree on a quick 1-on-1 video call from your Zirakpur showroom in natural daylight?`
+      : `Hi SilkWorm Creation, I am contacting you from ${destinationCountry} regarding "${product.title}" (${formatPrice(product.price)}). Can you schedule a daylight video drape inspection call before dispatching to ${destinationCountry}?`
   );
 
   return (
@@ -252,6 +265,30 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
                 </span>
               </label>
 
+              {/* International Special: Ready-to-Wear 1-Minute Drape Pleating */}
+              {!isDomestic && (
+                <label className="flex items-center justify-between p-3 rounded-xl border border-gold-400/50 bg-gold-50/20 hover:border-gold-500 cursor-pointer transition-colors">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <input
+                      type="checkbox"
+                      checked={readyToWearPleating}
+                      onChange={(e) => setReadyToWearPleating(e.target.checked)}
+                      className="w-4 h-4 text-emerald-900 rounded focus:ring-gold-500 flex-shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-stone-900 flex items-center gap-1.5 truncate">
+                        <span>Ready-to-Wear 1-Minute Drape</span>
+                        <span className="px-1.5 py-0.5 bg-emerald-950 text-gold-300 text-[8px] font-bold rounded flex-shrink-0">Pre-Pleated</span>
+                      </p>
+                      <p className="text-[10px] text-stone-600 truncate">Custom waistband hooks &amp; pleats. Slip on like a skirt in 60s.</p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold text-emerald-950 flex-shrink-0 ml-2">
+                    +{formatPrice(750)}
+                  </span>
+                </label>
+              )}
+
               {/* Custom Blouse Stitching */}
               <div className="p-3 rounded-xl border border-stone-200 bg-white space-y-2.5">
                 <label className="flex items-center justify-between cursor-pointer">
@@ -292,34 +329,62 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
               </div>
             </div>
 
-            {/* Pincode Delivery Estimator */}
-            <div className="p-3 sm:p-4 rounded-2xl bg-stone-50 border border-stone-200 text-xs">
-              <p className="font-bold text-stone-800 mb-2 flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-emerald-800 flex-shrink-0" />
-                <span>Delivery ETA at Your Pincode</span>
-              </p>
-              <form onSubmit={handleCheckPincode} className="flex gap-2">
-                <input
-                  type="text"
-                  maxLength={6}
-                  placeholder="6-digit Indian PIN code"
-                  value={pincode}
-                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
-                  className="flex-1 min-w-0 px-3 py-2 text-xs rounded-xl bg-white border border-stone-200 focus:outline-none focus:border-gold-500 font-mono"
-                />
-                <button
-                  type="submit"
-                  className="px-3.5 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-xl font-bold text-xs flex-shrink-0"
-                >
-                  Verify
-                </button>
-              </form>
-              {deliveryResult && (
-                <p className="mt-2 text-[11px] font-semibold text-emerald-900 bg-emerald-50 p-2 rounded-lg border border-emerald-200 break-words">
-                  {deliveryResult}
+            {/* Logistics & Delivery Card: Domestic vs International */}
+            {isDomestic ? (
+              <div className="p-3 sm:p-4 rounded-2xl bg-stone-50 border border-stone-200 text-xs">
+                <p className="font-bold text-stone-800 mb-2 flex items-center gap-1.5">
+                  <Truck className="w-4 h-4 text-emerald-800 flex-shrink-0" />
+                  <span>Delivery ETA at Your Pincode</span>
                 </p>
-              )}
-            </div>
+                <form onSubmit={handleCheckPincode} className="flex gap-2">
+                  <input
+                    type="text"
+                    maxLength={6}
+                    placeholder="6-digit Indian PIN code"
+                    value={pincode}
+                    onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
+                    className="flex-1 min-w-0 px-3 py-2 text-xs rounded-xl bg-white border border-stone-200 focus:outline-none focus:border-gold-500 font-mono"
+                  />
+                  <button
+                    type="submit"
+                    className="px-3.5 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-xl font-bold text-xs flex-shrink-0"
+                  >
+                    Verify
+                  </button>
+                </form>
+                {deliveryResult && (
+                  <p className="mt-2 text-[11px] font-semibold text-emerald-900 bg-emerald-50 p-2 rounded-lg border border-emerald-200 break-words">
+                    {deliveryResult}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-emerald-950 via-[#0a2316] to-emerald-950 text-cream-100 border border-gold-500/30 text-xs space-y-2.5 shadow-md">
+                <div className="flex items-center justify-between">
+                  <p className="font-serif font-bold text-gold-300 flex items-center gap-1.5 text-xs sm:text-sm">
+                    <Plane className="w-4 h-4 text-gold-400 flex-shrink-0" />
+                    <span>DHL Express to {destinationCountry}</span>
+                  </p>
+                  <span className="px-2 py-0.5 bg-gold-500 text-emerald-950 text-[10px] font-bold rounded-full">
+                    4–6 Business Days
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-emerald-900/60 text-[11px]">
+                  <div>
+                    <p className="text-cream-300/80 text-[10px]">Landed Duty Guarantee</p>
+                    <p className="font-semibold text-white">All Customs Pre-Cleared</p>
+                  </div>
+                  <div>
+                    <p className="text-cream-300/80 text-[10px]">Export Presentation</p>
+                    <p className="font-semibold text-white">Signature Keepsake Box</p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-cream-300/80 leading-snug">
+                  Tracked end-to-end air courier directly from our atelier in Punjab to your doorstep in {destinationCountry}. Zero unexpected fees on delivery.
+                </p>
+              </div>
+            )}
 
             {/* Desktop Action Buttons (Inside Scroll View) */}
             <div className="hidden sm:block space-y-2.5 pt-2">
@@ -337,7 +402,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
                   className="py-3 px-4 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-gold-300 border border-gold-400/40 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/20 transition-all"
                 >
                   <Zap className="w-4 h-4 text-gold-400 fill-current" />
-                  <span>1-Click Buy</span>
+                  <span>{isDomestic ? '1-Click Buy' : `Instant Buy (${currency})`}</span>
                 </button>
               </div>
 
@@ -348,26 +413,48 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
                 className="w-full py-2.5 px-4 rounded-2xl border border-emerald-900/20 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
               >
                 <Video className="w-4 h-4 text-green-600 animate-pulse" />
-                <span>Book 1-on-1 Video Call on WhatsApp to Inspect Saree</span>
+                <span>{isDomestic ? 'Book 1-on-1 Video Call on WhatsApp to Inspect Saree' : `Schedule 1-on-1 Daylight Video Call (${destinationCountry})`}</span>
               </a>
 
-              {/* 7-Day Exchange Trust Guarantee */}
+              {/* Trust Guarantees */}
               <div className="grid grid-cols-3 gap-1.5 p-2.5 rounded-2xl bg-cream-100/90 border border-stone-200 text-center text-[10px] text-stone-700">
-                <div className="flex flex-col items-center gap-0.5 min-w-0">
-                  <RefreshCw className="w-3.5 h-3.5 text-emerald-800 flex-shrink-0" />
-                  <span className="font-bold text-stone-900 truncate w-full">7-Day Exchange</span>
-                  <span className="text-[9px] text-stone-500 truncate w-full">Doorstep pickup</span>
-                </div>
-                <div className="flex flex-col items-center gap-0.5 border-x border-stone-200 min-w-0 px-1">
-                  <Sparkles className="w-3.5 h-3.5 text-gold-600 flex-shrink-0" />
-                  <span className="font-bold text-stone-900 truncate w-full">Free Fall &amp; Pico</span>
-                  <span className="text-[9px] text-stone-500 truncate w-full">Pre-finished</span>
-                </div>
-                <div className="flex flex-col items-center gap-0.5 min-w-0">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-800 flex-shrink-0" />
-                  <span className="font-bold text-stone-900 truncate w-full">Transit Insured</span>
-                  <span className="text-[9px] text-stone-500 truncate w-full">100% Protection</span>
-                </div>
+                {isDomestic ? (
+                  <>
+                    <div className="flex flex-col items-center gap-0.5 min-w-0">
+                      <RefreshCw className="w-3.5 h-3.5 text-emerald-800 flex-shrink-0" />
+                      <span className="font-bold text-stone-900 truncate w-full">7-Day Exchange</span>
+                      <span className="text-[9px] text-stone-500 truncate w-full">Doorstep pickup</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-0.5 border-x border-stone-200 min-w-0 px-1">
+                      <Sparkles className="w-3.5 h-3.5 text-gold-600 flex-shrink-0" />
+                      <span className="font-bold text-stone-900 truncate w-full">Free Fall &amp; Pico</span>
+                      <span className="text-[9px] text-stone-500 truncate w-full">Pre-finished</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-0.5 min-w-0">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-800 flex-shrink-0" />
+                      <span className="font-bold text-stone-900 truncate w-full">Transit Insured</span>
+                      <span className="text-[9px] text-stone-500 truncate w-full">100% Protection</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col items-center gap-0.5 min-w-0">
+                      <Plane className="w-3.5 h-3.5 text-emerald-800 flex-shrink-0" />
+                      <span className="font-bold text-stone-900 truncate w-full">DHL Air Express</span>
+                      <span className="text-[9px] text-stone-500 truncate w-full">4–6 Days Tracked</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-0.5 border-x border-stone-200 min-w-0 px-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-gold-600 flex-shrink-0" />
+                      <span className="font-bold text-stone-900 truncate w-full">Duties Pre-Paid</span>
+                      <span className="text-[9px] text-stone-500 truncate w-full">Zero Extra Fees</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-0.5 min-w-0">
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-800 flex-shrink-0" />
+                      <span className="font-bold text-stone-900 truncate w-full">Artisan Certified</span>
+                      <span className="text-[9px] text-stone-500 truncate w-full">Silk Mark Handloom</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -391,7 +478,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
               className="flex-[1.4] py-3 px-3 rounded-2xl bg-emerald-950 text-gold-300 border border-gold-400/40 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-98 transition-transform"
             >
               <Zap className="w-3.5 h-3.5 text-gold-400 fill-current" />
-              <span className="truncate">Buy Now &bull; {formatPrice(product.price)}</span>
+              <span className="truncate">{isDomestic ? 'Buy Now' : `Instant Buy`} &bull; {formatPrice(product.price)}</span>
             </button>
           </div>
 
@@ -402,7 +489,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
             className="w-full py-2 px-3 rounded-xl bg-emerald-50 text-emerald-950 text-[11px] font-semibold flex items-center justify-center gap-1.5 truncate"
           >
             <Video className="w-3.5 h-3.5 text-green-600 flex-shrink-0 animate-pulse" />
-            <span className="truncate">Book 1-on-1 Video Call on WhatsApp</span>
+            <span className="truncate">{isDomestic ? 'Book 1-on-1 Video Call on WhatsApp' : `Book Daylight Video Drape Call (${destinationCountry})`}</span>
           </a>
         </div>
 
