@@ -6,6 +6,7 @@ import { ShoppingBag, Menu, X, Heart, MapPin, Video, Globe, Truck, ChevronDown, 
 import { useCart } from '@/context/CartContext';
 import { Currency } from '@/types';
 import Link from 'next/link';
+import CurrencyDropdown from '@/components/CurrencyDropdown';
 
 interface NavbarProps {
   onCategorySelect: (cat: string) => void;
@@ -139,22 +140,7 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
           {/* Right: Utility Actions (Currency, Wishlist, Cart) */}
           <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
             {/* Currency Selector Pill */}
-            <div className="relative flex items-center gap-1 border border-stone-300/70 rounded-full px-2 sm:px-3 py-1 bg-white/80 backdrop-blur-sm text-[11px] sm:text-xs shadow-2xs hover:border-gold-500/60 transition-colors">
-              <Globe className="w-3 h-3 text-gold-600 flex-shrink-0" />
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value as Currency)}
-                className="bg-transparent text-stone-800 font-bold focus:outline-none cursor-pointer text-[11px] sm:text-xs pr-1 appearance-none"
-                aria-label="Select currency"
-              >
-                <option value="INR">₹ INR</option>
-                <option value="USD">$ USD</option>
-                <option value="CAD">CA$ CAD</option>
-                <option value="GBP">£ GBP</option>
-                <option value="AED">AED</option>
-              </select>
-              <ChevronDown className="w-2.5 h-2.5 text-stone-400 pointer-events-none -ml-0.5" />
-            </div>
+            <CurrencyDropdown />
 
 
             {/* Wishlist Button (Desktop) */}
@@ -250,19 +236,9 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
             <div className="mt-4 p-3 bg-white rounded-2xl border border-stone-200 shadow-2xs flex items-center justify-between text-xs">
               <span className="font-semibold text-stone-600 flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5 text-gold-600" />
-                <span>Currency:</span>
+                <span>Currency &amp; Region:</span>
               </span>
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value as Currency)}
-                className="font-bold text-emerald-950 bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1 text-xs focus:outline-none"
-              >
-                <option value="INR">INR (₹ India)</option>
-                <option value="USD">USD ($ USA)</option>
-                <option value="CAD">CAD (CA$ Canada)</option>
-                <option value="GBP">GBP (£ UK)</option>
-                <option value="AED">AED (د.إ UAE)</option>
-              </select>
+              <CurrencyDropdown />
             </div>
 
             {/* Editorial Categories Navigation */}
