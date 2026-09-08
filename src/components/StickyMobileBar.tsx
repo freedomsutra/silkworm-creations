@@ -46,7 +46,7 @@ export default function StickyMobileBar({
   };
 
   return (
-    <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-lg border-t border-stone-200/90 px-3 py-2.5 shadow-[0_-4px_25px_rgba(0,0,0,0.12)]">
+    <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-lg border-t border-stone-200/90 px-3 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-4px_25px_rgba(0,0,0,0.12)]">
       <div className="flex items-center gap-2">
         {/* Left Action: WhatsApp Drape Call */}
         <button

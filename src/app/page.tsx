@@ -45,7 +45,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-cream-50 pb-16 md:pb-0 w-full max-w-full overflow-x-hidden min-w-0">
+    <main className="min-h-screen flex flex-col bg-cream-50 pb-28 md:pb-0 w-full max-w-full overflow-x-hidden min-w-0">
       <AnnouncementBar />
 
 

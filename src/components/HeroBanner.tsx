@@ -125,10 +125,13 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
                 )}
               </span>
 
-              {/* Live Daylight Inspection Beacon */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/90 border border-emerald-700/50 text-[10px] sm:text-xs text-cream-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                <span className="text-emerald-300 font-medium">Live Daylight Salon Active</span>
+              {/* Live Daylight Inspection Beacon (WCAG Compliant High Contrast) */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-900/90 border border-emerald-400/60 text-[10px] sm:text-xs shadow-xs">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                </span>
+                <span className="text-emerald-100 font-semibold tracking-wide">Live Daylight Salon Active</span>
               </div>
             </div>
 
@@ -144,7 +147,7 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
             </div>
 
             {/* Value Proposition Description */}
-            <p className="text-xs sm:text-sm md:text-base text-stone-300/90 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-stone-200 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
               {isDomestic ? (
                 "Master-woven Pure Linen, Banarasi Semi-Silk Tissue, and Handloom Cotton Sarees crafted by heritage weaver guilds. Every piece is pre-finished with complimentary Fall & Pico and dispatched directly from our Zirakpur flagship."
               ) : (

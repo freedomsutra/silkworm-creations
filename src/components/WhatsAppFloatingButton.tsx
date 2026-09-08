@@ -7,7 +7,7 @@ export default function WhatsAppFloatingButton() {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   return (
-    <div className="hidden md:flex fixed bottom-6 right-6 z-40 flex-col items-end">
+    <div className="hidden md:flex fixed bottom-6 right-6 z-30 flex-col items-end">
       
       {/* Popover Quick Menu */}
       {popoverOpen && (

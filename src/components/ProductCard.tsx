@@ -60,6 +60,7 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           alt={product.title}
           className="w-full h-full object-cover object-[center_15%] transition-opacity duration-500 group-hover:opacity-0 absolute inset-0"
           loading="lazy"
+          decoding="async"
         />
 
         {/* Secondary Image: Close-up Texture & Zari Weave Flip */}
@@ -68,6 +69,7 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           alt={`${product.title} fabric texture zoom`}
           className="w-full h-full object-cover object-[center_15%] transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
           loading="lazy"
+          decoding="async"
         />
 
 
@@ -192,29 +194,39 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
             </span>
           </div>
 
-          {/* Streamlined Primary CTA */}
-          <div className="flex items-center gap-2 w-full min-w-0">
+          {/* Balanced Dual Action CTAs: + Add to Bag (Trousseau / Multi-Item) + 1-Click Buy (Impulse) */}
+          <div className="grid grid-cols-2 gap-2 w-full min-w-0">
             <button
-              onClick={handleInstantBuy}
-              className="flex-1 min-w-0 py-2.5 px-3 bg-gradient-to-r from-emerald-950 via-[#103322] to-emerald-950 hover:from-emerald-900 hover:to-emerald-900 text-gold-300 border border-gold-400/50 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-all hover:border-gold-300 active:scale-98"
+              onClick={handleAddToCart}
+              className={`py-2.5 px-2 rounded-xl border font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-98 min-w-0 ${
+                added 
+                  ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs' 
+                  : 'bg-stone-100 hover:bg-stone-200/90 text-stone-900 border-stone-300/80 hover:border-stone-400'
+              }`}
+              aria-label={added ? 'Added to bag' : `Add ${product.title} to bag`}
             >
-              <Zap className="w-3.5 h-3.5 text-gold-400 fill-gold-400 flex-shrink-0" />
-              <span className="truncate text-gold-200 font-semibold tracking-wide">
-                {isDomestic ? '1-Click Buy (UPI)' : `Instant Buy (${currency})`}
-              </span>
+              {added ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-gold-300 flex-shrink-0" />
+                  <span className="truncate text-white font-semibold">Added ✓</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-3.5 h-3.5 text-stone-700 flex-shrink-0" />
+                  <span className="truncate font-semibold">+ Add to Bag</span>
+                </>
+              )}
             </button>
 
             <button
-              onClick={handleAddToCart}
-              className={`p-2.5 rounded-xl border transition-all flex-shrink-0 flex items-center justify-center ${
-                added 
-                  ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs' 
-                  : 'bg-stone-100 hover:bg-stone-200 text-stone-800 border-stone-200 hover:border-stone-300'
-              }`}
-              title="Add to Bag"
-              aria-label="Add to Bag"
+              onClick={handleInstantBuy}
+              className="py-2.5 px-2 bg-gradient-to-r from-emerald-950 via-[#103322] to-emerald-950 hover:from-emerald-900 text-gold-300 border border-gold-400/50 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1 shadow-sm transition-all hover:border-gold-300 active:scale-98 min-w-0"
+              aria-label={isDomestic ? `1-Click Buy with UPI for ${product.title}` : `Instant checkout in ${currency} for ${product.title}`}
             >
-              {added ? <Check className="w-4 h-4 text-white" /> : <ShoppingBag className="w-4 h-4 text-stone-800" />}
+              <Zap className="w-3.5 h-3.5 text-gold-400 fill-gold-400 flex-shrink-0" />
+              <span className="truncate text-gold-200 font-semibold tracking-wide">
+                {isDomestic ? '1-Click Buy' : 'Instant Buy'}
+              </span>
             </button>
           </div>
 
