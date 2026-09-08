@@ -27,6 +27,17 @@ export default function CatalogSection({
 
   const colors = ['All', 'Red', 'Black', 'Green', 'Blue', 'Pink/Purple', 'Gold/Yellow', 'Beige/Neutral'];
 
+  const COLOR_SWATCHES: Record<string, string> = {
+    'All': '#D4AF37',
+    'Red': '#C41E3A',
+    'Black': '#1A1A1A',
+    'Green': '#1B4D3E',
+    'Blue': '#1E3F66',
+    'Pink/Purple': '#9B4D68',
+    'Gold/Yellow': '#D4AF37',
+    'Beige/Neutral': '#D2B48C',
+  };
+
   const colorCounts = useMemo(() => {
     const counts: Record<string, number> = { All: products.length };
     products.forEach((p) => {
@@ -124,7 +135,7 @@ export default function CatalogSection({
             <button
               onClick={() => setPriceBand('all')}
               className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
-                priceBand === 'all' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                priceBand === 'all' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
               All Prices
@@ -132,7 +143,7 @@ export default function CatalogSection({
             <button
               onClick={() => setPriceBand('under-8500')}
               className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
-                priceBand === 'under-8500' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                priceBand === 'under-8500' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
               Under ₹8,500
@@ -140,7 +151,7 @@ export default function CatalogSection({
             <button
               onClick={() => setPriceBand('8500-10000')}
               className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
-                priceBand === '8500-10000' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                priceBand === '8500-10000' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
               ₹8,500 - ₹10,000
@@ -148,7 +159,7 @@ export default function CatalogSection({
             <button
               onClick={() => setPriceBand('above-10000')}
               className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all ${
-                priceBand === 'above-10000' ? 'bg-emerald-900 text-gold-300' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                priceBand === 'above-10000' ? 'bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
               }`}
             >
               ₹10,000+ Luxury
@@ -183,12 +194,16 @@ export default function CatalogSection({
               <button
                 key={c}
                 onClick={() => setSelectedColor(c)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
                   selectedColor === c
                     ? 'bg-emerald-950 text-white border border-gold-400/60 shadow-sm ring-1 ring-gold-400/20'
-                    : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                    : 'bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200/60'
                 }`}
               >
+                <span
+                  className="w-2.5 h-2.5 rounded-full border border-black/15 shadow-2xs flex-shrink-0"
+                  style={{ backgroundColor: COLOR_SWATCHES[c] || '#D4AF37' }}
+                />
                 <span>{c}</span>
                 <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
                   selectedColor === c ? 'bg-gold-500 text-emerald-950' : 'bg-stone-200 text-stone-600'

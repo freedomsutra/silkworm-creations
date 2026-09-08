@@ -83,7 +83,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
         {/* Modal Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-3.5 border-b border-stone-100 bg-cream-50 flex-shrink-0">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-gold-300 truncate">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-gold-300 border border-gold-400/40 truncate">
               {product.fabric}
             </span>
             <span className="text-[11px] sm:text-xs text-stone-500 font-medium truncate">
@@ -132,7 +132,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
 
                 <button
                   onClick={() => onWatchDrape(product)}
-                  className="px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-900/90 text-gold-300 backdrop-blur-md hover:bg-emerald-950 flex items-center gap-1 shadow-md flex-shrink-0"
+                  className="px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-950 text-gold-300 border border-gold-400/40 backdrop-blur-md hover:bg-emerald-900 flex items-center gap-1 shadow-md flex-shrink-0"
                   aria-label="View Drape Motion"
                 >
                   <Video className="w-3.5 h-3.5 text-green-400 animate-pulse" />
@@ -334,7 +334,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
 
                 <button
                   onClick={handleBuyNow}
-                  className="py-3 px-4 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-gold-300 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/20 transition-all"
+                  className="py-3 px-4 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-gold-300 border border-gold-400/40 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/20 transition-all"
                 >
                   <Zap className="w-4 h-4 text-gold-400 fill-current" />
                   <span>1-Click Buy</span>
@@ -388,7 +388,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
 
             <button
               onClick={handleBuyNow}
-              className="flex-[1.4] py-3 px-3 rounded-2xl bg-emerald-950 text-gold-300 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-98 transition-transform"
+              className="flex-[1.4] py-3 px-3 rounded-2xl bg-emerald-950 text-gold-300 border border-gold-400/40 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-98 transition-transform"
             >
               <Zap className="w-3.5 h-3.5 text-gold-400 fill-current" />
               <span className="truncate">Buy Now &bull; {formatPrice(product.price)}</span>

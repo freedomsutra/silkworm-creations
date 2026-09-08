@@ -12,6 +12,12 @@ interface ProductCardProps {
   onWatchDrape: (product: SareeProduct) => void;
 }
 
+function shortFabric(fabric: string): string {
+  if (fabric.includes('Pure Linen / Handloom Cotton')) return 'Linen Cotton';
+  if (fabric.includes('Banarasi Semi-Silk Tissue')) return 'Banarasi Tissue';
+  return fabric;
+}
+
 export default function ProductCard({ product, onQuickView, onWatchDrape }: ProductCardProps) {
   const { addItem, triggerInstantCheckout, isWishlisted, toggleWishlist, formatPrice } = useCart();
   const [added, setAdded] = useState(false);
@@ -63,13 +69,13 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           loading="lazy"
         />
 
-        {/* Top-Left Badges Overlay */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start z-10">
-          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-gold-300 backdrop-blur-md shadow-sm">
-            {product.fabric}
+        {/* Top-Left Badges Overlay (Luxury Editorial Style) */}
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 items-start z-10 max-w-[70%]">
+          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950/95 text-gold-300 border border-gold-400/40 backdrop-blur-md shadow-sm">
+            {shortFabric(product.fabric)}
           </span>
           {discountPercent > 0 && (
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-rose-600 text-white shadow-xs">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#5C1D24]/95 text-rose-200 border border-rose-400/40 backdrop-blur-md shadow-sm">
               {discountPercent}% OFF
             </span>
           )}
@@ -176,7 +182,7 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           <div className="flex items-center gap-2">
             <button
               onClick={handleInstantBuy}
-              className="flex-1 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-gold-300 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-all"
+              className="flex-1 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-gold-300 border border-gold-500/40 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-all hover:border-gold-400 active:scale-98"
             >
               <Zap className="w-3.5 h-3.5 text-gold-400 fill-current" />
               <span>1-Click Buy (UPI)</span>
