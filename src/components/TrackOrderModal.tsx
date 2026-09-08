@@ -82,7 +82,7 @@ export default function TrackOrderModal() {
             </div>
 
             <p className="text-[11px] text-stone-500 pt-2 border-t border-stone-200">
-              Expected Delivery: <strong>Tomorrow by 5:00 PM</strong> (Chandigarh/Tricity Hub)
+              Expected Delivery: <strong>Tomorrow by 5:00 PM</strong> (Atelier Chandigarh Hub)
             </p>
           </div>
         )}

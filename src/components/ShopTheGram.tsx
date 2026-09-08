@@ -52,7 +52,7 @@ export default function ShopTheGram({ products, onSelectProduct }: ShopTheGramPr
               Shop The &lsquo;Gram
             </h2>
             <p className="text-stone-600 text-xs sm:text-sm mt-1">
-              Real drapes, client styling moments, and behind-the-scenes from our Tricity showroom.
+              Real drapes, client styling moments, and behind-the-scenes from Atelier Chandigarh.
             </p>
           </div>
 

@@ -10,17 +10,17 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'SilkWorm Creation | Luxury Handloom & Heritage Sarees | Chandigarh & Tricity',
-  description: 'Shop authentic Pure Linen, Banarasi Tissue, and Handloom Cotton Sarees from SilkWorm Creation. Flagship showroom at Reliance Square, Zirakpur/Panchkula. Free Fall & Pico, 1-on-1 WhatsApp video viewing & pan-India delivery.',
-  keywords: 'SilkWorm Creation, Sarees Chandigarh, Pure Linen Saree, Banarasi Tissue Saree, Handloom Sarees Panchkula, Saree showroom Zirakpur, Silk sarees online India',
+  title: 'SilkWorm Creation | Luxury Handloom & Heritage Sarees | Atelier Chandigarh',
+  description: 'Handcrafted in the Heritage Weaving Guilds of India • Atelier Chandigarh. Explore pure linen, banarasi tissue, and handloom cotton sarees with 1-on-1 video drape salon & worldwide express delivery.',
+  keywords: 'SilkWorm Creation, Luxury Sarees, Atelier Chandigarh, Pure Linen Saree, Banarasi Tissue Saree, Handloom Sarees India, Handcrafted Heritage Weaves',
   openGraph: {
     title: 'SilkWorm Creation | Handcrafted Luxury Sarees',
-    description: 'Woven with Heritage. Explore handcrafted pure linen, tissue silk, and handloom cotton sarees with 1-on-1 WhatsApp video shopping.',
-    url: 'https://silkwormcreation.com',
+    description: 'Handcrafted in the Heritage Weaving Guilds of India • Atelier Chandigarh. Pure linen, tissue silk, and handloom cotton sarees with 1-on-1 WhatsApp video shopping.',
+    url: 'https://silkWormcreation.com',
     siteName: 'SilkWorm Creation',
     images: [
       {
-        url: 'https://silkwormcreation.com/cdn/shop/files/logo_f8198345-0573-4a95-9cc8-826faac7a1ca.jpg',
+        url: 'https://silkWormcreation.com/cdn/shop/files/logo_f8198345-0573-4a95-9cc8-826faac7a1ca.jpg',
         width: 800,
         height: 800,
         alt: 'SilkWorm Creation Logo',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'SilkWorm Creation | Handcrafted Sarees',
-    description: 'Explore pure linen, banarasi tissue, and handloom sarees. Flagship showroom in Chandigarh Tricity.',
+    description: 'Handcrafted in the Heritage Weaving Guilds of India • Atelier Chandigarh. Luxury handloom sarees with worldwide express delivery.',
   },
   alternates: {
     canonical: 'https://silkwormcreation.com',

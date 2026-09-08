@@ -17,15 +17,15 @@ export default function FAQSection() {
     },
     {
       q: 'How does the 1-on-1 WhatsApp Video Viewing work?',
-      a: 'Buying luxury handloom online can be daunting if you haven\'t seen the color in daylight. Click "Book Video Consultation" on any saree, and our showroom stylist at Reliance Square, Zirakpur will connect with you on WhatsApp Video Call. We hold the saree up in natural sunlight, show you the reverse of the weave, and demonstrate the pallu drape before you buy.'
+      a: 'Buying luxury handloom online can be daunting if you haven\'t seen the color in daylight. Click "Book Video Consultation" on any saree, and our stylist at Atelier Chandigarh will connect with you on a dedicated WhatsApp Video Call. We hold the saree up in natural sunlight, show you the reverse of the weave, and demonstrate the pallu drape before you buy.'
     },
     {
-      q: 'What are your delivery timelines for Chandigarh Tricity and Pan-India?',
-      a: 'For Chandigarh, Panchkula, Mohali, and Zirakpur, we offer express Same-Day or Next-Day delivery. For all other Indian cities, orders are shipped via insured air couriers (BlueDart/Delhivery) and arrive within 2 to 4 business days. We also offer international express delivery to USA, UK, Canada, and UAE.'
+      q: 'What are your delivery timelines for Chandigarh Capital Region and Pan-India?',
+      a: 'For Chandigarh, Panchkula, Mohali, and the Capital Region, we offer express Same-Day or Next-Day dispatch directly from Atelier Chandigarh. For all other Indian cities, orders are shipped via insured air couriers (BlueDart/Delhivery) and arrive within 2 to 4 business days. We also offer worldwide priority express delivery to USA, UK, Canada, Australia, and UAE.'
     },
     {
       q: 'Can I exchange the saree if the color or drape does not suit me?',
-      a: 'Yes! We offer a hassle-free 7-day exchange window. Simply message us on WhatsApp (+91 78767 19360) or email silkwormcreation@gmail.com, and we will arrange a reverse pickup or welcome you to our Zirakpur showroom to exchange for another piece.'
+      a: 'Yes! We offer a hassle-free 7-day exchange window. Simply message us on WhatsApp (+91 78767 19360) or email silkwormcreation@gmail.com, and we will arrange a complimentary courier pickup or welcome you to Atelier Chandigarh to exchange for another piece.'
     }
   ];
 

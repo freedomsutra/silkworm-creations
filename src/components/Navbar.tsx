@@ -86,15 +86,13 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
           <div className="hidden lg:flex items-center gap-5 text-xs text-stone-600 font-medium">
             {isDomestic ? (
               <>
-                <a
-                  href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/boutique"
                   className="flex items-center gap-1.5 hover:text-emerald-950 transition-colors"
                 >
                   <MapPin className="w-3.5 h-3.5 text-gold-600" />
-                  <span>Zirakpur Flagship</span>
-                </a>
+                  <span>Atelier Chandigarh</span>
+                </Link>
                 <span className="text-stone-300">&bull;</span>
                 <button
                   onClick={openTrackModal}
@@ -174,33 +172,6 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
           </div>
         </div>
       </div>
-
-      {/* Desktop Category Navigation Sub-Bar (Clean Luxury Editorial Links) */}
-      <nav className="hidden lg:block border-t border-stone-200/50 bg-[#FAF8F5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center space-x-6 xl:space-x-8 py-2.5">
-            {categories.map((cat) => {
-              const isActive = selectedCategory === cat.value;
-              return (
-                <button
-                  key={cat.value}
-                  onClick={() => onCategorySelect(cat.value)}
-                  className={`relative py-1 text-[11px] xl:text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300 ${
-                    isActive
-                      ? 'text-emerald-950 font-bold'
-                      : 'text-stone-600 hover:text-emerald-950'
-                  }`}
-                >
-                  <span>{cat.label}</span>
-                  {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-gold-400 via-amber-400 to-gold-500 rounded-full animate-in fade-in zoom-in-95 duration-200" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </nav>
     </header>
 
     {/* Mobile Slide-Over Menu Drawer portaled directly to document.body */}
@@ -302,15 +273,14 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
                 <span>{isDomestic ? 'Track Saree Dispatch' : `Track DHL Parcel (${destinationCountry})`}</span>
               </button>
 
-              <a
-                href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/boutique"
+                onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-3 p-3 bg-white border border-stone-200 text-stone-800 rounded-xl font-medium text-xs"
               >
                 <MapPin className="w-4 h-4 text-gold-700" />
-                <span className="truncate">{isDomestic ? 'SCO 2, Reliance Sq, Zirakpur' : 'Visiting Punjab? Flagship Fitting'}</span>
-              </a>
+                <span className="truncate">{isDomestic ? 'Atelier Chandigarh Flagship' : 'Visiting India? Atelier Private Fitting'}</span>
+              </Link>
             </div>
           </div>
 

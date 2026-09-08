@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Sparkles, MapPin, Video, Plane, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
@@ -36,15 +37,13 @@ export default function AnnouncementBar() {
         {/* Right Luxury Quick Links (Desktop & Tablet) */}
         <div className="hidden sm:flex items-center gap-4 text-[11px] text-cream-200 flex-shrink-0">
           {isDomestic ? (
-            <a
-              href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/boutique"
               className="flex items-center gap-1 hover:text-gold-300 transition-colors"
             >
               <MapPin className="w-3 h-3 text-gold-400" />
-              <span className="truncate">Reliance Sq, Zirakpur</span>
-            </a>
+              <span className="truncate">Atelier Chandigarh</span>
+            </Link>
           ) : (
             <span className="flex items-center gap-1 text-gold-300 font-medium">
               <ShieldCheck className="w-3.5 h-3.5 text-gold-400" />

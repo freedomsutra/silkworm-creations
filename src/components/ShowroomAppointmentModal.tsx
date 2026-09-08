@@ -29,7 +29,7 @@ export default function ShowroomAppointmentModal({ isOpen, onClose }: ShowroomAp
       `⏰ *Time Slot:* ${timeSlot}\n` +
       `👗 *Occasion / Interest:* ${occasion}\n` +
       `👥 *Party Size:* ${guests}\n` +
-      `📍 *Showroom:* SCO 2, 1st Floor, Reliance Square, Peer Muchalla, Zirakpur`
+      `📍 *Atelier:* SilkWorm Creation • Atelier Chandigarh (Reliance Square, Zirakpur Hub)`
     );
     window.open(`https://wa.me/917876719360?text=${msg}`, '_blank');
     setSubmitted(true);
@@ -55,7 +55,7 @@ export default function ShowroomAppointmentModal({ isOpen, onClose }: ShowroomAp
                 VIP Boutique Appointment
               </h3>
               <p className="text-[11px] text-stone-500">
-                SilkWorm Creation &bull; Peer Muchalla, Zirakpur (Chandigarh Hub)
+                SilkWorm Creation &bull; Atelier Chandigarh Flagship Salon
               </p>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function ShowroomAppointmentModal({ isOpen, onClose }: ShowroomAp
             <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-start gap-2.5 text-[11px] text-stone-600">
               <MapPin className="w-4 h-4 text-gold-600 flex-shrink-0 mt-0.5" />
               <span>
-                <strong>Showroom Address:</strong> SCO 2, 1st Floor, Reliance Square, Peer Muchalla, Zirakpur (Next to Sector 20 Panchkula). Free parking available.
+                <strong>Atelier Chandigarh:</strong> SCO 2, 1st Floor, Reliance Square, Peer Muchalla / Zirakpur (Adjacent to Sec 20 Panchkula). Reserved parking available.
               </span>
             </div>
 

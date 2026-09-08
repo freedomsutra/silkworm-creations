@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { MapPin, Clock, Phone, Navigation, Sparkles, Calendar, Video, Plane } from 'lucide-react';
 import ShowroomAppointmentModal from '@/components/ShowroomAppointmentModal';
 import { useCart } from '@/context/CartContext';
@@ -22,18 +23,18 @@ export default function ShowroomSection() {
           <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/15 border border-gold-400/30 text-gold-300 text-xs font-bold uppercase tracking-wider">
               {isDomestic ? <MapPin className="w-3.5 h-3.5 text-gold-400" /> : <Plane className="w-3.5 h-3.5 text-gold-400" />}
-              <span>{isDomestic ? 'Flagship Boutique Experience' : `Punjab Atelier & ${destinationCountry} Concierge`}</span>
+              <span>{isDomestic ? 'Atelier Chandigarh &bull; Flagship Salon' : `Punjab Atelier &bull; ${destinationCountry} Concierge`}</span>
             </div>
 
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-cream-50 leading-tight">
               {isDomestic 
-                ? 'Visit SilkWorm Creation in Person' 
+                ? 'Experience Atelier Chandigarh in Person' 
                 : 'Visiting Punjab Soon? Or Drape Live in Natural Daylight'}
             </h2>
 
             <p className="text-xs sm:text-sm text-cream-200/90 leading-relaxed">
               {isDomestic
-                ? 'Nothing compares to feeling the tactile drape of handcrafted linen and handloom weave. We welcome you to our flagship boutique in the Chandigarh–Panchkula–Zirakpur hub.'
+                ? 'Handcrafted in the Heritage Weaving Guilds of India • Atelier Chandigarh. We invite discerning patrons to experience tactile pure linen, tissue silks, and master-weaver editions in our natural daylight salon.'
                 : `Planning your next wedding or festive visit to India? Reserve a private styling session at our atelier just 15 minutes from Chandigarh Airport (IXC), or schedule a 1-on-1 daylight video drape session from ${destinationCountry} right now.`
               }
             </p>
@@ -43,16 +44,24 @@ export default function ShowroomSection() {
                 <MapPin className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-serif text-sm font-bold text-white">
-                    {isDomestic ? 'Showroom Address' : 'Atelier Location (15 Mins from Chandigarh Airport)'}
+                    {isDomestic ? 'Flagship Salon Suite' : 'Atelier Location (15 Mins from Chandigarh Airport)'}
                   </h4>
                   <p className="text-xs text-cream-200 mt-0.5">
-                    SCO 2, 1st Floor, Reliance Square, Opposite City Plaza, Near D-Mart, Peer Muchalla, Zirakpur, Punjab 160104
+                    Atelier Chandigarh &bull; Reliance Square Suite, Zirakpur (Chandigarh Hub), Punjab 160104
                   </p>
                   <p className="text-[11px] text-gold-300/80 mt-1">
                     {isDomestic 
-                      ? 'Adjacent to Panchkula Sector 20 • 15 Mins from Chandigarh Airport' 
+                      ? '15 Mins from Chandigarh International Airport (IXC) • Dedicated Valet Parking' 
                       : 'Convenient airport transit stopover • VIP bridal appointments available'}
                   </p>
+                  <div className="mt-2">
+                    <Link
+                      href="/boutique"
+                      className="text-xs text-gold-400 hover:text-gold-300 font-semibold inline-flex items-center gap-1 underline underline-offset-2"
+                    >
+                      <span>View Detailed Boutique Guide &amp; Directions &rarr;</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
 
@@ -149,7 +158,7 @@ export default function ShowroomSection() {
                   <p className="text-[11px] text-cream-300">Over 100+ unlisted bridal, festive &amp; everyday drapes</p>
                 </div>
                 <span className="px-3 py-1 bg-gold-500 text-emerald-950 rounded-lg text-[10px] font-bold uppercase">
-                  {isDomestic ? 'Tricity Flagship' : `Export to ${destinationCountry}`}
+                  {isDomestic ? 'Atelier Chandigarh' : `Export to ${destinationCountry}`}
                 </span>
               </div>
             </div>

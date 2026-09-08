@@ -213,7 +213,7 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
               ) : (
                 <>
                   <ShoppingBag className="w-3.5 h-3.5 text-stone-700 flex-shrink-0" />
-                  <span className="truncate font-semibold">+ Add to Bag</span>
+                  <span className="truncate font-semibold">Add to Bag</span>
                 </>
               )}
             </button>

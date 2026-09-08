@@ -16,7 +16,7 @@ export default function ReviewsSection() {
           Loved Across Chandigarh &amp; Worldwide
         </h2>
         <p className="text-stone-600 text-xs sm:text-sm mt-2">
-          Real patron experiences from our Tricity boutique &amp; international doorstep deliveries.
+          Real patron experiences from Atelier Chandigarh &amp; international doorstep deliveries.
         </p>
 
         {/* Aggregate Score Bar */}

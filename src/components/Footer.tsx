@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Sparkles, MapPin, Phone, Mail, Instagram, Facebook, ShieldCheck, Heart } from 'lucide-react';
 
 export default function Footer() {
@@ -60,18 +61,23 @@ export default function Footer() {
               <li><span>Free Fall &amp; Pico Detailing</span></li>
               <li><span>Custom Blouse Tailoring</span></li>
               <li><span>1-on-1 Video Consultation</span></li>
-              <li><span>Express Tricity Delivery</span></li>
+              <li><span>Regional Same-Day Express</span></li>
               <li><span>Worldwide NRI Shipping</span></li>
             </ul>
           </div>
 
           {/* Contact & Legal */}
           <div className="lg:col-span-4 space-y-3">
-            <h4 className="font-serif text-sm font-bold text-gold-300">Showroom &amp; Office</h4>
+            <h4 className="font-serif text-sm font-bold text-gold-300">Flagship Salon &amp; Atelier</h4>
             <div className="space-y-2.5 text-xs text-cream-300">
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-gold-400 flex-shrink-0 mt-0.5" />
-                <span>Showroom: SCO 2, 1st Floor, Reliance Square, Peer Muchalla, Zirakpur 160104</span>
+                <span>
+                  Atelier Chandigarh &bull; Reliance Square, Zirakpur 160104 &bull;{' '}
+                  <Link href="/boutique" className="text-gold-400 hover:text-gold-300 underline font-semibold">
+                    Visiting Guide &rarr;
+                  </Link>
+                </span>
               </p>
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-stone-400 flex-shrink-0 mt-0.5" />

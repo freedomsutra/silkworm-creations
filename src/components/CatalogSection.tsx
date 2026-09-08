@@ -160,12 +160,12 @@ export default function CatalogSection({
           The Saree Repertory
         </h2>
         <p className="text-stone-600 text-xs sm:text-sm mt-2.5 max-w-lg mx-auto">
-          Every piece is handcrafted with pure yarns, inspected at our Chandigarh boutique, and delivered ready-to-wear with complimentary Fall &amp; Pico.
+          Every piece is handcrafted with pure yarns, inspected at Atelier Chandigarh, and delivered ready-to-wear with complimentary Fall &amp; Pico.
         </p>
       </div>
 
       {/* Sticky High-Fashion Visual Filter Bar */}
-      <div className="sticky top-[56px] sm:top-[66px] lg:top-[74px] z-30 bg-white/95 backdrop-blur-xl rounded-3xl p-3 sm:p-5 border border-stone-200/90 shadow-[0_8px_30px_rgba(0,0,0,0.06)] mb-8 space-y-3.5 w-full max-w-full min-w-0 overflow-hidden transition-all">
+      <div className="sticky top-[64px] sm:top-[80px] z-30 bg-white/95 backdrop-blur-xl rounded-3xl p-3 sm:p-5 border border-stone-200/90 shadow-[0_8px_30px_rgba(0,0,0,0.06)] mb-8 space-y-3.5 w-full max-w-full min-w-0 overflow-hidden transition-all">
         
         {/* Row 1: Category Quick-Tabs */}
         <div className="flex items-center justify-between gap-2 border-b border-stone-100 pb-2.5">

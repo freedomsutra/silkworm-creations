@@ -149,7 +149,7 @@ export default function HeroBanner({ onExploreClick, onBookVideoCall }: HeroBann
             {/* Value Proposition Description */}
             <p className="text-xs sm:text-sm md:text-base text-stone-200 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
               {isDomestic ? (
-                "Master-woven Pure Linen, Banarasi Semi-Silk Tissue, and Handloom Cotton Sarees crafted by heritage weaver guilds. Every piece is pre-finished with complimentary Fall & Pico and dispatched directly from our Zirakpur flagship."
+                "Master-woven Pure Linen, Banarasi Semi-Silk Tissue, and Handloom Cotton Sarees crafted by heritage weaver guilds. Every piece is pre-finished with complimentary Fall & Pico and dispatched directly from Atelier Chandigarh."
               ) : (
                 `Authentic Indian artisanal handloom sarees delivered directly to your doorstep in ${destinationCountry}. Finished with complimentary Fall & Pico, pre-stitched 1-minute drape options, and guaranteed pre-cleared customs duties.`
               )}

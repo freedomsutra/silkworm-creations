@@ -134,7 +134,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     : 'DHL Express Worldwide Air';
 
   const shippingTimeline = isDomestic 
-    ? '2–3 Business Days (Same-day dispatch in Tricity)' 
+    ? '2–3 Business Days (Same-day Atelier dispatch)' 
     : '4–6 Business Days Tracked Doorstep Delivery';
 
   const shippingPromise = isDomestic 

@@ -22,8 +22,8 @@ export default function TrustBadges() {
     },
     {
       icon: MapPin,
-      title: 'Showroom in Tricity',
-      desc: 'Visit our flagship boutique in SCO 2, Reliance Square, Peer Muchalla (Open 7 Days).'
+      title: 'Flagship Atelier',
+      desc: 'Experience our curated handloom collections in person at Atelier Chandigarh (Open 7 Days).'
     }
   ];
 
