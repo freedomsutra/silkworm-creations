@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { ShoppingBag, Menu, X, Heart, MapPin, Video, Globe, Truck, ChevronDown, PhoneCall } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Currency } from '@/types';
@@ -14,6 +15,23 @@ interface NavbarProps {
 export default function Navbar({ onCategorySelect, selectedCategory }: NavbarProps) {
   const { totalItems, openCart, wishlist, openWishlist, currency, setCurrency, openTrackModal } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
 
   const categories = [
     { label: 'All Sarees', value: 'All', count: '17' },
@@ -25,7 +43,9 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-xl border-b border-stone-200/70 transition-all shadow-[0_2px_20px_rgba(0,0,0,0.02)]">
+    <>
+      <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-xl border-b border-stone-200/70 transition-all shadow-[0_2px_20px_rgba(0,0,0,0.02)]">
+
       {/* Main Top Navigation Row */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
@@ -165,137 +185,140 @@ export default function Navbar({ onCategorySelect, selectedCategory }: NavbarPro
           </div>
         </div>
       </nav>
+    </header>
 
-      {/* Mobile Slide-Over Menu Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div 
-            className="fixed inset-0 bg-black/70 backdrop-blur-xs transition-opacity"
-            onClick={() => setMobileMenuOpen(false)} 
-          />
+    {/* Mobile Slide-Over Menu Drawer portaled directly to document.body */}
+    {mounted && mobileMenuOpen && typeof document !== 'undefined' && createPortal(
+      <div className="fixed inset-0 z-[100] lg:hidden animate-in fade-in duration-200">
+        <div 
+          className="fixed inset-0 bg-black/75 backdrop-blur-xs transition-opacity"
+          onClick={() => setMobileMenuOpen(false)} 
+        />
 
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-[#FAF8F5] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
-            <div>
-              {/* Drawer Brand Header */}
-              <div className="flex items-center justify-between pb-5 border-b border-stone-200/80">
-                <div>
-                  <h3 className="font-serif text-lg font-bold tracking-[0.2em] text-emerald-950">
-                    SILKWORM
-                  </h3>
-                  <p className="text-[9px] tracking-[0.3em] text-gold-700 uppercase font-semibold">
-                    ATELIER CHANDIGARH
-                  </p>
-                </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 text-stone-500 hover:text-stone-900 rounded-lg"
-                  aria-label="Close menu"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Currency Selector Box */}
-              <div className="mt-4 p-3 bg-white rounded-2xl border border-stone-200 shadow-2xs flex items-center justify-between text-xs">
-                <span className="font-semibold text-stone-600 flex items-center gap-1.5">
-                  <Globe className="w-3.5 h-3.5 text-gold-600" />
-                  <span>Currency:</span>
-                </span>
-                <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value as Currency)}
-                  className="font-bold text-emerald-950 bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1 text-xs focus:outline-none"
-                >
-                  <option value="INR">INR (₹ India)</option>
-                  <option value="USD">USD ($ USA)</option>
-                  <option value="CAD">CAD (CA$ Canada)</option>
-                  <option value="GBP">GBP (£ UK)</option>
-                  <option value="AED">AED (د.إ UAE)</option>
-                </select>
-              </div>
-
-              {/* Editorial Categories Navigation */}
-              <div className="mt-6 space-y-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold-700 px-3 mb-2">
-                  Handloom Collections
+        <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-[#FAF8F5] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-in slide-in-from-left duration-300">
+          <div>
+            {/* Drawer Brand Header */}
+            <div className="flex items-center justify-between pb-5 border-b border-stone-200/80">
+              <div>
+                <h3 className="font-serif text-lg font-bold tracking-[0.2em] text-emerald-950">
+                  SILKWORM
+                </h3>
+                <p className="text-[9px] tracking-[0.3em] text-gold-700 uppercase font-semibold">
+                  ATELIER CHANDIGARH
                 </p>
-                {categories.map((cat, idx) => {
-                  const isActive = selectedCategory === cat.value;
-                  return (
-                    <button
-                      key={cat.value}
-                      onClick={() => {
-                        onCategorySelect(cat.value);
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold tracking-wider flex items-center justify-between transition-all ${
-                        isActive
-                          ? 'bg-emerald-950 text-white font-bold shadow-sm'
-                          : 'text-stone-800 hover:bg-stone-200/60'
-                      }`}
-                    >
-                      <span className="flex items-center gap-2">
-                        <span className={`text-[10px] ${isActive ? 'text-gold-400' : 'text-stone-400'} font-mono`}>
-                          0{idx + 1}
-                        </span>
-                        <span>{cat.label}</span>
-                      </span>
-                      {isActive && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-gold-400" />
-                      )}
-                    </button>
-                  );
-                })}
               </div>
-
-              {/* VIP Concierge Shortcuts */}
-              <div className="mt-6 pt-4 border-t border-stone-200/80 space-y-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400 px-3 mb-1">
-                  Concierge &amp; Showroom
-                </p>
-
-                <a
-                  href="https://wa.me/917876719360?text=Hi%20SilkWorm%20Creation,%20I%20would%20like%20to%20book%20a%201-on-1%20video%20call%20to%20see%20your%20sarees"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-emerald-950 text-gold-300 rounded-xl font-semibold text-xs shadow-xs"
-                >
-                  <Video className="w-4 h-4 text-green-400" />
-                  <span>Book WhatsApp Daylight Drape</span>
-                </a>
-
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    openTrackModal();
-                  }}
-                  className="w-full flex items-center gap-3 p-3 bg-white border border-stone-200 text-stone-800 rounded-xl font-semibold text-xs"
-                >
-                  <Truck className="w-4 h-4 text-emerald-800" />
-                  <span>Track Saree Dispatch</span>
-                </button>
-
-                <a
-                  href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-white border border-stone-200 text-stone-800 rounded-xl font-medium text-xs"
-                >
-                  <MapPin className="w-4 h-4 text-gold-700" />
-                  <span className="truncate">SCO 2, Reliance Sq, Zirakpur</span>
-                </a>
-              </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1.5 text-stone-500 hover:text-stone-900 rounded-lg"
+                aria-label="Close menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            {/* Drawer Footer */}
-            <div className="pt-6 border-t border-stone-200 text-xs text-stone-500 space-y-1">
-              <p className="font-semibold text-stone-800">Showroom Hours: 11 AM – 8 PM</p>
-              <p className="text-[11px] text-stone-500">Open 7 Days &bull; Panchkula / Chandigarh Hub</p>
-              <p className="text-[10px] text-gold-700 font-medium pt-1">Silk Mark Certified &bull; 100% Pure Natural Weave</p>
+            {/* Currency Selector Box */}
+            <div className="mt-4 p-3 bg-white rounded-2xl border border-stone-200 shadow-2xs flex items-center justify-between text-xs">
+              <span className="font-semibold text-stone-600 flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-gold-600" />
+                <span>Currency:</span>
+              </span>
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value as Currency)}
+                className="font-bold text-emerald-950 bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1 text-xs focus:outline-none"
+              >
+                <option value="INR">INR (₹ India)</option>
+                <option value="USD">USD ($ USA)</option>
+                <option value="CAD">CAD (CA$ Canada)</option>
+                <option value="GBP">GBP (£ UK)</option>
+                <option value="AED">AED (د.إ UAE)</option>
+              </select>
+            </div>
+
+            {/* Editorial Categories Navigation */}
+            <div className="mt-6 space-y-1">
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold-700 px-3 mb-2">
+                Handloom Collections
+              </p>
+              {categories.map((cat, idx) => {
+                const isActive = selectedCategory === cat.value;
+                return (
+                  <button
+                    key={cat.value}
+                    onClick={() => {
+                      onCategorySelect(cat.value);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold tracking-wider flex items-center justify-between transition-all ${
+                      isActive
+                        ? 'bg-emerald-950 text-white font-bold shadow-sm'
+                        : 'text-stone-800 hover:bg-stone-200/60'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className={`text-[10px] ${isActive ? 'text-gold-400' : 'text-stone-400'} font-mono`}>
+                        0{idx + 1}
+                      </span>
+                      <span>{cat.label}</span>
+                    </span>
+                    {isActive && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-400" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* VIP Concierge Shortcuts */}
+            <div className="mt-6 pt-4 border-t border-stone-200/80 space-y-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400 px-3 mb-1">
+                Concierge &amp; Showroom
+              </p>
+
+              <a
+                href="https://wa.me/917876719360?text=Hi%20SilkWorm%20Creation,%20I%20would%20like%20to%20book%20a%201-on-1%20video%20call%20to%20see%20your%20sarees"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 bg-emerald-950 text-gold-300 rounded-xl font-semibold text-xs shadow-xs"
+              >
+                <Video className="w-4 h-4 text-green-400" />
+                <span>Book WhatsApp Daylight Drape</span>
+              </a>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openTrackModal();
+                }}
+                className="w-full flex items-center gap-3 p-3 bg-white border border-stone-200 text-stone-800 rounded-xl font-semibold text-xs"
+              >
+                <Truck className="w-4 h-4 text-emerald-800" />
+                <span>Track Saree Dispatch</span>
+              </button>
+
+              <a
+                href="https://maps.google.com/?q=Reliance+Square+Peer+Muchalla+Zirakpur"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 bg-white border border-stone-200 text-stone-800 rounded-xl font-medium text-xs"
+              >
+                <MapPin className="w-4 h-4 text-gold-700" />
+                <span className="truncate">SCO 2, Reliance Sq, Zirakpur</span>
+              </a>
             </div>
           </div>
+
+          {/* Drawer Footer */}
+          <div className="pt-6 border-t border-stone-200 text-xs text-stone-500 space-y-1">
+            <p className="font-semibold text-stone-800">Showroom Hours: 11 AM – 8 PM</p>
+            <p className="text-[11px] text-stone-500">Open 7 Days &bull; Panchkula / Chandigarh Hub</p>
+            <p className="text-[10px] text-gold-700 font-medium pt-1">Silk Mark Certified &bull; 100% Pure Natural Weave</p>
+          </div>
         </div>
-      )}
-    </header>
-  );
+      </div>,
+      document.body
+    )}
+  </>
+);
 }
+
