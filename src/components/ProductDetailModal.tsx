@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { SareeProduct } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { 
   X, Star, Sun, Lightbulb, Video, ShoppingBag, Zap, 
   ShieldCheck, Scissors, Truck, Sparkles, RefreshCw, Check,
-  Plane, Gift, Globe
+  Plane, Gift, Globe, ArrowRight, ExternalLink
 } from 'lucide-react';
 
 interface ProductDetailModalProps {
@@ -82,6 +83,10 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
       : `Hi SilkWorm Creation, I am contacting you from ${destinationCountry} regarding "${product.title}" (${formatPrice(product.price)}). Can you schedule a daylight video drape inspection call before dispatching to ${destinationCountry}?`
   );
 
+  const editorialSummary = product.description.includes('Product Details')
+    ? product.description.split('Product Details')[0].trim()
+    : product.description;
+
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-hidden">
       {/* Backdrop */}
@@ -91,7 +96,7 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
       />
 
       {/* Modal Container: Mobile Sheet / Desktop Modal (Zero Overflow Guarantee) */}
-      <div className="relative bg-white w-full sm:max-w-4xl h-[92vh] sm:h-auto sm:max-h-[90vh] rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl z-10 border border-stone-200 flex flex-col overscroll-contain">
+      <div className="relative bg-white w-full sm:max-w-4xl h-[92vh] sm:h-[86vh] sm:max-h-[850px] rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl z-10 border border-stone-200 flex flex-col overscroll-contain">
         
         {/* Modal Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-3.5 border-b border-stone-100 bg-cream-50 flex-shrink-0">
@@ -103,126 +108,169 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
               SKU: SWC-{product.id}
             </span>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 sm:p-2 text-stone-500 hover:text-stone-900 rounded-full hover:bg-stone-200/60 transition-colors flex-shrink-0"
-            aria-label="Close product preview"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <Link
+              href={`/products/${product.handle}`}
+              onClick={onClose}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-950 hover:text-gold-700 bg-gold-500/15 hover:bg-gold-500/25 px-3 py-1.5 rounded-full border border-gold-400/40 transition-colors"
+              title="Open Full Saree Page"
+            >
+              <span>Full Saree Page</span>
+              <ArrowRight className="w-3.5 h-3.5 text-gold-600" />
+            </Link>
+            <button
+              onClick={onClose}
+              className="p-1.5 sm:p-2 text-stone-500 hover:text-stone-900 rounded-full hover:bg-stone-200/60 transition-colors flex-shrink-0 cursor-pointer"
+              aria-label="Close product preview"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="overflow-y-auto overflow-x-hidden p-4 sm:p-6 flex-1 space-y-5 sm:space-y-0 sm:grid sm:grid-cols-12 sm:gap-8">
-          
-          {/* Left Column: Gallery & Lighting Switcher */}
-          <div className="sm:col-span-6 space-y-3 min-w-0">
-            {/* Main Image with Responsive Lighting Switcher */}
-            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 shadow-inner group">
-              <img
-                src={product.images[selectedImg] || product.images[0]}
-                alt={product.title}
-                className={`w-full h-full object-cover transition-all duration-500 ${
-                  isDaylightMode ? 'brightness-105 contrast-105 saturate-110' : ''
-                }`}
-              />
-
-              {/* Lighting Mode Switcher Banner (Responsive Compact Zero-Overflow) */}
-              <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 flex items-center justify-between gap-1.5 z-10">
-                <button
-                  onClick={() => setIsDaylightMode(!isDaylightMode)}
-                  className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 shadow-md backdrop-blur-md transition-all flex-shrink-0 ${
-                    isDaylightMode
-                      ? 'bg-amber-400 text-stone-950 ring-2 ring-amber-300'
-                      : 'bg-stone-900/85 text-white hover:bg-stone-900'
+        <div className="overflow-y-auto overflow-x-hidden p-4 sm:p-6 flex-1 min-h-0 overscroll-contain">
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 sm:gap-8 items-start">
+            
+            {/* Left Column: Gallery & Lighting Switcher (Sticky on Desktop) */}
+            <div className="sm:col-span-6 space-y-3 min-w-0 sm:sticky sm:top-0">
+              {/* Main Image with Responsive Lighting Switcher */}
+              <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 shadow-inner group">
+                <img
+                  src={product.images[selectedImg] || product.images[0]}
+                  alt={product.title}
+                  className={`w-full h-full object-cover transition-all duration-500 ${
+                    isDaylightMode ? 'brightness-105 contrast-105 saturate-110' : ''
                   }`}
-                  aria-label="Toggle Sunlight view"
-                >
-                  {isDaylightMode ? <Sun className="w-3.5 h-3.5 text-amber-950 fill-current" /> : <Lightbulb className="w-3.5 h-3.5 text-gold-400" />}
-                  <span>{isDaylightMode ? 'Sunlight' : 'Studio'}</span>
-                  <span className="hidden xs:inline">{isDaylightMode ? ' View' : ' Flash'}</span>
-                </button>
+                />
 
-                <button
-                  onClick={() => onWatchDrape(product)}
-                  className="px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-950 text-gold-300 border border-gold-400/40 backdrop-blur-md hover:bg-emerald-900 flex items-center gap-1 shadow-md flex-shrink-0"
-                  aria-label="View Drape Motion"
-                >
-                  <Video className="w-3.5 h-3.5 text-green-400 animate-pulse" />
-                  <span>Drape</span>
-                  <span className="hidden xs:inline"> Motion</span>
-                </button>
+                {/* Lighting Mode Switcher Banner (Responsive Compact Zero-Overflow) */}
+                <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 flex items-center justify-between gap-1.5 z-10">
+                  <button
+                    onClick={() => setIsDaylightMode(!isDaylightMode)}
+                    className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 shadow-md backdrop-blur-md transition-all flex-shrink-0 ${
+                      isDaylightMode
+                        ? 'bg-amber-400 text-stone-950 ring-2 ring-amber-300'
+                        : 'bg-stone-900/85 text-white hover:bg-stone-900'
+                    }`}
+                    aria-label="Toggle Sunlight view"
+                  >
+                    {isDaylightMode ? <Sun className="w-3.5 h-3.5 text-amber-950 fill-current" /> : <Lightbulb className="w-3.5 h-3.5 text-gold-400" />}
+                    <span>{isDaylightMode ? 'Sunlight' : 'Studio'}</span>
+                    <span className="hidden xs:inline">{isDaylightMode ? ' View' : ' Flash'}</span>
+                  </button>
+
+                  <button
+                    onClick={() => onWatchDrape(product)}
+                    className="px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-950 text-gold-300 border border-gold-400/40 backdrop-blur-md hover:bg-emerald-900 flex items-center gap-1 shadow-md flex-shrink-0 cursor-pointer"
+                    aria-label="View Drape Motion"
+                  >
+                    <Video className="w-3.5 h-3.5 text-green-400 animate-pulse" />
+                    <span>Drape</span>
+                    <span className="hidden xs:inline"> Motion</span>
+                  </button>
+                </div>
+
+                {/* Daylight Explanation Note */}
+                {isDaylightMode && (
+                  <div className="absolute bottom-2.5 inset-x-2.5 p-2 rounded-xl bg-amber-500/95 text-stone-950 text-[10px] font-semibold text-center backdrop-blur-md shadow-md">
+                    ☀️ Outdoor Natural Lighting (True-to-life shade)
+                  </div>
+                )}
               </div>
 
-              {/* Daylight Explanation Note */}
-              {isDaylightMode && (
-                <div className="absolute bottom-2.5 inset-x-2.5 p-2 rounded-xl bg-amber-500/95 text-stone-950 text-[10px] font-semibold text-center backdrop-blur-md shadow-md">
-                  ☀️ Outdoor Natural Lighting (True-to-life shade)
+              {/* Thumbnail Selector (Smooth Edge-to-Edge Scroll) */}
+              {product.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none">
+                  {product.images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedImg(idx)}
+                      className={`relative w-14 h-18 sm:w-16 sm:h-20 rounded-xl overflow-hidden border-2 flex-shrink-0 transition-all cursor-pointer ${
+                        selectedImg === idx ? 'border-gold-500 ring-2 ring-gold-500/20' : 'border-stone-200 opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={img} alt="thumbnail" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
 
-            {/* Thumbnail Selector (Smooth Edge-to-Edge Scroll) */}
-            {product.images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none">
-                {product.images.map((img, idx) => (
+            {/* Right Column: Details & Customizations */}
+            <div className="sm:col-span-6 space-y-4 sm:space-y-5 min-w-0">
+              <div>
+                <div className="flex items-center gap-1.5 text-amber-500 text-xs font-bold mb-1">
+                  <Star className="w-3.5 h-3.5 fill-current" />
+                  <span>{product.rating}</span>
+                  <span className="text-stone-400 font-normal">({product.reviewsCount} verified reviews)</span>
+                </div>
+
+                <Link 
+                  href={`/products/${product.handle}`} 
+                  onClick={onClose}
+                  className="group/title block"
+                >
+                  <h2 className="font-serif text-lg sm:text-2xl font-bold text-emerald-950 leading-snug group-hover/title:text-emerald-700 transition-colors break-words">
+                    {product.title}
+                  </h2>
+                  <span className="text-[11px] text-stone-500 font-sans group-hover/title:underline inline-flex items-center gap-1 mt-0.5">
+                    <span>Open dedicated product page</span>
+                    <ArrowRight className="w-3 h-3 text-gold-600" />
+                  </span>
+                </Link>
+
+                <div className="flex items-baseline gap-2.5 mt-2 flex-wrap">
+                  <span className="text-xl sm:text-2xl font-bold text-emerald-950 font-serif">
+                    {formatPrice(product.price)}
+                  </span>
+                  <span className="text-xs sm:text-sm text-stone-400 line-through">
+                    {formatPrice(product.originalPrice)}
+                  </span>
+                  <span className="px-2 py-0.5 text-[10px] sm:text-xs font-bold text-emerald-800 bg-emerald-100 rounded-md">
+                    Tax Included
+                  </span>
+                </div>
+
+                {/* Silk Mark Seal Badge */}
+                <div className="mt-3 flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-amber-50/90 border border-gold-500/40 text-emerald-950 overflow-hidden">
+                  <div className="p-1.5 sm:p-2 bg-gold-500 text-emerald-950 rounded-xl font-bold flex-shrink-0 shadow-2xs">
+                    <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] sm:text-xs font-bold text-emerald-950 flex items-center gap-1 truncate">
+                      <span>Govt. Recognized Silk Mark</span>
+                      <span className="px-1.5 py-0.5 bg-emerald-950 text-gold-300 text-[8px] font-bold rounded flex-shrink-0">100% Pure</span>
+                    </p>
+                    <p className="text-[10px] text-stone-600 truncate">Pure natural yarns with handloom artisan verification.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Primary Action Buttons (Prominent on Desktop) */}
+              <div className="hidden sm:block space-y-2 pt-1">
+                <div className="grid grid-cols-2 gap-2.5">
                   <button
-                    key={idx}
-                    onClick={() => setSelectedImg(idx)}
-                    className={`relative w-14 h-18 sm:w-16 sm:h-20 rounded-xl overflow-hidden border-2 flex-shrink-0 transition-all ${
-                      selectedImg === idx ? 'border-gold-500 ring-2 ring-gold-500/20' : 'border-stone-200 opacity-70 hover:opacity-100'
-                    }`}
+                    onClick={handleAddToCart}
+                    className="py-3 px-3 rounded-2xl bg-stone-100 hover:bg-stone-200 text-stone-900 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <img src={img} alt="thumbnail" className="w-full h-full object-cover" />
+                    {added ? <Check className="w-4 h-4 text-emerald-800" /> : <ShoppingBag className="w-4 h-4" />}
+                    <span>{added ? 'Added to Bag!' : 'Add to Bag'}</span>
                   </button>
-                ))}
-              </div>
-            )}
-          </div>
 
-          {/* Right Column: Details & Customizations */}
-          <div className="sm:col-span-6 space-y-4 sm:space-y-5 min-w-0 overflow-hidden">
-            <div>
-              <div className="flex items-center gap-1.5 text-amber-500 text-xs font-bold mb-1">
-                <Star className="w-3.5 h-3.5 fill-current" />
-                <span>{product.rating}</span>
-                <span className="text-stone-400 font-normal">({product.reviewsCount} verified reviews)</span>
-              </div>
-
-              <h2 className="font-serif text-lg sm:text-2xl font-bold text-emerald-950 leading-snug break-words">
-                {product.title}
-              </h2>
-
-              <div className="flex items-baseline gap-2.5 mt-1.5 flex-wrap">
-                <span className="text-xl sm:text-2xl font-bold text-emerald-950 font-serif">
-                  {formatPrice(product.price)}
-                </span>
-                <span className="text-xs sm:text-sm text-stone-400 line-through">
-                  {formatPrice(product.originalPrice)}
-                </span>
-                <span className="px-2 py-0.5 text-[10px] sm:text-xs font-bold text-emerald-800 bg-emerald-100 rounded-md">
-                  Tax Included
-                </span>
-              </div>
-
-              {/* Silk Mark Seal Badge */}
-              <div className="mt-3 flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-amber-50/90 border border-gold-500/40 text-emerald-950 overflow-hidden">
-                <div className="p-1.5 sm:p-2 bg-gold-500 text-emerald-950 rounded-xl font-bold flex-shrink-0 shadow-2xs">
-                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[11px] sm:text-xs font-bold text-emerald-950 flex items-center gap-1 truncate">
-                    <span>Govt. Recognized Silk Mark</span>
-                    <span className="px-1.5 py-0.5 bg-emerald-950 text-gold-300 text-[8px] font-bold rounded flex-shrink-0">100% Pure</span>
-                  </p>
-                  <p className="text-[10px] text-stone-600 truncate">Pure natural yarns with handloom artisan verification.</p>
+                  <button
+                    onClick={handleBuyNow}
+                    className="py-3 px-3 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-gold-300 border border-gold-400/40 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/20 transition-all cursor-pointer"
+                  >
+                    <Zap className="w-4 h-4 text-gold-400 fill-current" />
+                    <span>{isDomestic ? '1-Click Buy' : `Instant Buy`}</span>
+                  </button>
                 </div>
               </div>
-            </div>
 
-            <p className="text-xs text-stone-600 leading-relaxed break-words">
-              {product.description}
-            </p>
+              <p className="text-xs text-stone-600 leading-relaxed break-words">
+                {editorialSummary}
+              </p>
 
             {/* Saree Specifications Table */}
             <div className="p-3 sm:p-4 rounded-2xl bg-cream-50 border border-stone-200/80 text-xs space-y-2 overflow-hidden">
@@ -456,11 +504,23 @@ export default function ProductDetailModal({ product, onClose, onWatchDrape }: P
                   </>
                 )}
               </div>
+
+              {/* Dedicated Saree Page Direct Banner */}
+              <Link
+                href={`/products/${product.handle}`}
+                onClick={onClose}
+                className="w-full py-3 px-4 rounded-2xl bg-stone-900 hover:bg-emerald-950 text-gold-300 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-gold-400/40 shadow-sm transition-all text-center mt-2 cursor-pointer"
+              >
+                <span>View Full Product Page &amp; Atelier Specifications</span>
+                <ArrowRight className="w-4 h-4 text-gold-400" />
+              </Link>
             </div>
 
           </div>
 
         </div>
+
+      </div>
 
         {/* Mobile Docked Action Bar: ALWAYS accessible, never overflowing */}
         <div className="sm:hidden p-3 bg-white/95 backdrop-blur-md border-t border-stone-200 flex-shrink-0 space-y-2">

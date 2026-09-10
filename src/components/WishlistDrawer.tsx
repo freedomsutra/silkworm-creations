@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { PRODUCTS } from '@/data/products';
 import { X, Heart, ShoppingBag, Trash2, Zap } from 'lucide-react';
@@ -40,12 +41,20 @@ export default function WishlistDrawer({ onQuickView }: { onQuickView?: (p: Sare
           ) : (
             wishlistedProducts.map(p => (
               <div key={p.id} className="p-3.5 bg-white rounded-2xl border border-stone-200 flex gap-3.5 shadow-sm">
-                <img src={p.images[0]} alt={p.title} className="w-20 h-24 object-cover rounded-xl bg-stone-100 flex-shrink-0" />
-                <div className="flex-1 flex flex-col justify-between">
+                <Link href={`/products/${p.handle}`} onClick={closeWishlist} className="flex-shrink-0 block">
+                  <img src={p.images[0]} alt={p.title} className="w-20 h-24 object-cover rounded-xl bg-stone-100 hover:opacity-90 transition-opacity" />
+                </Link>
+                <div className="flex-1 flex flex-col justify-between min-w-0">
                   <div>
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-serif text-xs font-bold text-stone-900 line-clamp-1">{p.title}</h4>
-                      <button onClick={() => toggleWishlist(p.id)} className="text-stone-400 hover:text-rose-600 p-1">
+                    <div className="flex justify-between items-start gap-1">
+                      <Link 
+                        href={`/products/${p.handle}`} 
+                        onClick={closeWishlist}
+                        className="font-serif text-xs font-bold text-stone-900 hover:text-emerald-800 hover:underline line-clamp-1 block"
+                      >
+                        {p.title}
+                      </Link>
+                      <button onClick={() => toggleWishlist(p.id)} className="text-stone-400 hover:text-rose-600 p-1 flex-shrink-0">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>

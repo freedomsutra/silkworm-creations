@@ -48,29 +48,33 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
 
   return (
     <div 
-      onClick={() => onQuickView(product)}
-      className="group relative bg-white rounded-3xl overflow-hidden border border-stone-200/90 hover:border-gold-500/60 transition-all duration-300 hover:shadow-xl flex flex-col cursor-pointer w-full min-w-0"
+      className="group relative bg-white rounded-3xl overflow-hidden border border-stone-200/90 hover:border-gold-500/60 transition-all duration-300 hover:shadow-xl flex flex-col w-full min-w-0"
     >
       {/* Product Image Container with Dual-Image Hover Transition */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
-        
-        {/* Primary Image: Model Drape Shot with tailored vertical framing */}
-        <img
-          src={product.images[0] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80'}
-          alt={product.title}
-          className="w-full h-full object-cover object-[center_15%] transition-opacity duration-500 group-hover:opacity-0 absolute inset-0"
-          loading="lazy"
-          decoding="async"
-        />
+        <Link 
+          href={`/products/${product.handle}`}
+          className="absolute inset-0 block cursor-pointer z-0"
+          aria-label={`View ${product.title} full details`}
+        >
+          {/* Primary Image: Model Drape Shot with tailored vertical framing */}
+          <img
+            src={product.images[0] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80'}
+            alt={product.title}
+            className="w-full h-full object-cover object-[center_15%] transition-opacity duration-500 group-hover:opacity-0 absolute inset-0"
+            loading="lazy"
+            decoding="async"
+          />
 
-        {/* Secondary Image: Close-up Texture & Zari Weave Flip */}
-        <img
-          src={product.images[1] || product.images[0]}
-          alt={`${product.title} fabric texture zoom`}
-          className="w-full h-full object-cover object-[center_15%] transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
-          loading="lazy"
-          decoding="async"
-        />
+          {/* Secondary Image: Close-up Texture & Zari Weave Flip */}
+          <img
+            src={product.images[1] || product.images[0]}
+            alt={`${product.title} fabric texture zoom`}
+            className="w-full h-full object-cover object-[center_15%] transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
+            loading="lazy"
+            decoding="async"
+          />
+        </Link>
 
 
         {/* Top-Left Badges Overlay (Luxury Editorial Style) */}
@@ -142,15 +146,19 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
           >
             <Video className="w-4 h-4 text-emerald-900" />
           </button>
-          <Link
-            href={`/products/${product.handle}`}
-            onClick={(e) => e.stopPropagation()}
-            className="p-3 bg-white text-emerald-950 rounded-full hover:bg-gold-500 transition-colors shadow-lg pointer-events-auto transform hover:scale-105"
-            title="View Full Saree Story"
-            aria-label="View Full Saree Story"
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onQuickView(product);
+            }}
+            className="p-3 bg-white text-emerald-950 rounded-full hover:bg-gold-500 transition-colors shadow-lg pointer-events-auto transform hover:scale-105 cursor-pointer"
+            title="Quick View Saree"
+            aria-label="Quick View Saree"
           >
             <Eye className="w-4 h-4 text-emerald-900" />
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -173,8 +181,13 @@ export default function ProductCard({ product, onQuickView, onWatchDrape }: Prod
             </span>
           </div>
 
-          <h3 className="font-serif text-sm sm:text-base font-bold text-stone-900 line-clamp-2 group-hover:text-emerald-950 transition-colors leading-snug">
-            {product.title}
+          <h3 className="line-clamp-2 leading-snug">
+            <Link
+              href={`/products/${product.handle}`}
+              className="font-serif text-sm sm:text-base font-bold text-stone-900 hover:text-emerald-800 hover:underline transition-colors block"
+            >
+              {product.title}
+            </Link>
           </h3>
 
           <p className="text-xs text-stone-500 mt-1.5 flex items-center gap-1.5">

@@ -95,9 +95,24 @@ export default function CatalogSection({
   const [isExpanded, setIsExpanded] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const section = document.getElementById('catalog-section');
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      const inView = rect.top <= window.innerHeight * 0.75 && rect.bottom >= 140;
+      setShowMobileFilter(inView);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -209,9 +224,10 @@ export default function CatalogSection({
       <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
         
         {/* ========================================================= */}
-        {/* DESKTOP LEFT SIDEBAR: Non-sticky, resting on left side    */}
+        {/* DESKTOP LEFT SIDEBAR: Sticky during browsing, unsticks    */}
+        {/* when products reach their end                            */}
         {/* ========================================================= */}
-        <aside className="hidden lg:block w-64 xl:w-72 flex-shrink-0 self-start bg-white rounded-3xl p-6 border border-stone-200/90 shadow-sm space-y-6">
+        <aside className="hidden lg:block w-64 xl:w-72 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto scrollbar-none bg-white rounded-3xl p-6 border border-stone-200/90 shadow-sm space-y-6">
           
           {/* Sidebar Header */}
           <div className="flex items-center justify-between pb-4 border-b border-stone-100">
@@ -519,11 +535,15 @@ export default function CatalogSection({
 
       {/* ========================================================= */}
       {/* MOBILE FLOATING FILTER BUTTON (FAB)                      */}
-      {/* Positioned comfortably above sticky mobile bar           */}
+      {/* Visible only while catalog section is in viewport        */}
       {/* ========================================================= */}
       <button
         onClick={() => setMobileDrawerOpen(true)}
-        className="fixed bottom-20 left-4 z-40 lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-[0_10px_25px_rgba(0,0,0,0.35)] backdrop-blur-md text-xs font-bold uppercase tracking-wider active:scale-95 transition-all cursor-pointer"
+        className={`fixed bottom-20 left-4 z-40 lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-950 text-gold-300 border border-gold-400/50 shadow-[0_10px_25px_rgba(0,0,0,0.35)] backdrop-blur-md text-xs font-bold uppercase tracking-wider active:scale-95 transition-all duration-300 cursor-pointer ${
+          showMobileFilter
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 translate-y-6 pointer-events-none'
+        }`}
         aria-label="Open filter menu"
       >
         <SlidersHorizontal className="w-3.5 h-3.5 text-gold-400" />
